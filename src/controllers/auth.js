@@ -12,8 +12,8 @@ exports.register = catchAsync(async (req, res) => {
 });
 
 exports.login = catchAsync(async (req, res) => {
-  const { email, password } = req.body;
-  const user = await auth.loginUserWithEmailAndPassword(email, password);
+  const { input, password } = req.body;
+  const user = await auth.loginUserWithEmailAndPassword(input, password);
   const tokens = await token.generateAuthTokens(user);
   res
     .status(httpStatus.OK)
