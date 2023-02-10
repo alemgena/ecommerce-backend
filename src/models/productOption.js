@@ -8,13 +8,19 @@ const productOption = new mongoose.Schema(
     subcategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subcategory",
-      required: true,
     },
-
+    input_type: {
+      type: String,
+      enum: ["check", "input"],
+    },
     name: {
       type: String,
       required: true,
       trim: true,
+    },
+    parentOption: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductOption",
     },
     deletedAt: { type: Date, default: null },
   },
@@ -36,6 +42,20 @@ productOption.set("toObject", { virtuals: true });
 productOption.plugin(toJSON);
 productOption.plugin(paginate);
 productOption.plugin(mongoose_delete, { overrideMethods: true });
+productOption
+  .path("subcategory")
+  .required(
+    this.parentOption == "",
+    "Sub category or parent option is required"
+  );
+productOption
+  .path("parentOption")
+  .required(
+    this.subcategory == "",
+    "Sub category or parent option is required"
+  );
+
+productOption.index({ name: 1, subcategory: 1 }, { unique: true });
 
 const ProductOption = mongoose.model("ProductOption", productOption);
 // ProductOption.collection.createIndex(

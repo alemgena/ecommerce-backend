@@ -19,45 +19,25 @@ exports.add = async (sID, body) => {
           new ApiError(httpStatus.BAD_REQUEST, "Sub category not found")
         );
       }
-      ProductOption.findOne(
-        { ...body, subcategory: data.id },
-        (err, duplicated) => {
-          if (err) {
-            return reject(
-              new ApiError(
-                httpStatus.BAD_REQUEST,
-                "Error adding subcategory option",
-                err
-              )
-            );
-          }
-          if (duplicated) {
-            return reject(
-              new ApiError(
-                httpStatus.BAD_REQUEST,
-                "Subcategory option already exists"
-              )
-            );
-          }
 
-          ProductOption.create(
-            { ...body, subcategory: data.id },
-            (err, data) => {
-              if (err) {
-                return reject(
-                  new ApiError(
-                    httpStatus.BAD_REQUEST,
-                    "Error adding product option",
-                    err
-                  )
-                );
-              }
+      const options = body.options.map((option) => ({
+        subcategory: data.id,
+        name: option,
+      }));
 
-              resolve(data);
-            }
+      ProductOption.insertMany(options, (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.BAD_REQUEST,
+              "Error adding product option",
+              err
+            )
           );
         }
-      );
+
+        resolve(data);
+      });
     });
   });
 };
@@ -120,6 +100,63 @@ exports.get = (id) => {
       }
 
       resolve(data);
+    });
+  });
+};
+
+exports.AddSubOption = async (poID, body) => {
+  return new Promise((resolve, reject) => {
+    ProductOption.findOne({ _id: poID }, async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(
+            httpStatus.BAD_REQUEST,
+            "Error finding the product option",
+            err
+          )
+        );
+      }
+      if (!data) {
+        return reject(
+          new ApiError(httpStatus.BAD_REQUEST, "Product option not found")
+        );
+      }
+      ProductOption.findOne(
+        { ...body, parentOption: data.id },
+        (err, duplicated) => {
+          if (err) {
+            return reject(
+              new ApiError(
+                httpStatus.BAD_REQUEST,
+                "Error adding sub option",
+                err
+              )
+            );
+          }
+          if (duplicated) {
+            return reject(
+              new ApiError(httpStatus.BAD_REQUEST, "Sub option already exists")
+            );
+          }
+
+          ProductOption.create(
+            { ...body, parentOption: data.id },
+            (err, data) => {
+              if (err) {
+                return reject(
+                  new ApiError(
+                    httpStatus.BAD_REQUEST,
+                    "Error adding sub option",
+                    err
+                  )
+                );
+              }
+
+              resolve(data);
+            }
+          );
+        }
+      );
     });
   });
 };

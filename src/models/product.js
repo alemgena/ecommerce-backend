@@ -46,6 +46,16 @@ const productSchema = mongoose.Schema(
             autopopulate: { maxDepth: 1 },
           },
         ],
+        value: {
+          type: String,
+          trim: true,
+        },
+        others: [
+          {
+            type: String,
+            trim: true,
+          },
+        ],
       },
     ],
     seller: {

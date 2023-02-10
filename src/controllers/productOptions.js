@@ -16,6 +16,19 @@ exports.add = catchAsync(async (req, res) => {
     );
 });
 
+exports.addSubOption = catchAsync(async (req, res) => {
+  const data = await productOption.AddSubOption(req.params.id, req.body);
+  res
+    .status(httpStatus.CREATED)
+    .send(
+      new SuccessResponse(
+        httpStatus.CREATED,
+        "Sub option successfully created",
+        data
+      )
+    );
+});
+
 exports.delete = catchAsync(async (req, res) => {
   const data = await productOption.delete(req.params.id);
   res

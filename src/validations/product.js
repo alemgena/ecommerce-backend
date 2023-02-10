@@ -38,11 +38,15 @@ const add = {
           "any.required": "option are required",
         }),
         values: Joi.array().items(
-          Joi.string().required().messages({
+          Joi.string().messages({
             "string.base": "option values must be a string",
             "any.required": "option values are required",
           })
         ),
+        value: Joi.string().messages({
+          "string.base": "value must be a string",
+          "string.empty": "value cannot be an empty field",
+        }),
       })
     ),
     // featured: Joi.boolean(),
