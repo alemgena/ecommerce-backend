@@ -34,7 +34,7 @@ exports.suspendUserAccount = catchAsync(async (req, res) => {
 });
 
 exports.update = catchAsync(async (req, res) => {
-  const original = await user.view(req.params.id);
+  const original = await user.get(req.params.id);
   const data = await user.update(req.params.id, req.body);
 
   res.status(httpStatus.OK).send(
