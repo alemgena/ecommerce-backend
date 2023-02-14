@@ -9,6 +9,11 @@ const optionValue = new mongoose.Schema(
       ref: "ProductOption",
       required: true,
     },
+    parent_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OptionValue",
+      autopopulate: { maxDepth: 1 },
+    },
     value: { type: String, required: true, trim: true },
     deletedAt: { type: Date, default: null },
   },

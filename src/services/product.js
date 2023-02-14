@@ -33,15 +33,15 @@ exports.add = async (productData) => {
       _id: { $in: option.values },
       option: option.id,
     });
-
-    if (optionValues.length !== option.values.length) {
-      throw new ApiError(
-        httpStatus.BAD_REQUEST,
-        "One or more options values not found"
-      );
+    if (option.values?.length) {
+      if (optionValues.length !== option.values.length) {
+        throw new ApiError(
+          httpStatus.BAD_REQUEST,
+          "One or more options values not found"
+        );
+      }
     }
   }
-
   // Create the new product document
   const newProduct = new Product({
     ...productData,

@@ -24,6 +24,10 @@ const activityLog = () =>
               },
               model: req.originalUrl.split("/")[2],
             });
+
+            if (req.method == "PATCH") {
+              body.data = { ...body.data.edited };
+            }
           }
         }
       }

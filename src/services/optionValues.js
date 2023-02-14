@@ -15,45 +15,24 @@ exports.add = async (poID, body) => {
           new ApiError(httpStatus.BAD_REQUEST, "Product option not found")
         );
       }
-      OptionValue.findOne(
-        { value: body.value, option: data.id },
-        (err, duplicated) => {
-          if (err) {
-            return reject(
-              new ApiError(
-                httpStatus.BAD_REQUEST,
-                "Error adding a value for the option",
-                err
-              )
-            );
-          }
-          if (duplicated) {
-            return reject(
-              new ApiError(
-                httpStatus.BAD_REQUEST,
-                "Option value already exists"
-              )
-            );
-          }
 
-          OptionValue.create(
-            { value: body.value, option: data.id },
-            (err, data) => {
-              if (err) {
-                return reject(
-                  new ApiError(
-                    httpStatus.BAD_REQUEST,
-                    "Error adding product option value",
-                    err
-                  )
-                );
-              }
-
-              resolve(data);
-            }
+      const values = body.values.map((value) => ({
+        option: data.id,
+        value,
+      }));
+      OptionValue.insertMany(values, (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.BAD_REQUEST,
+              "Error adding product option values",
+              err
+            )
           );
         }
-      );
+
+        resolve(data);
+      });
     });
   });
 };
