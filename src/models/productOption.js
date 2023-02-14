@@ -35,6 +35,13 @@ productOption.virtual("values", {
   match: { deleted: false },
   autopopulate: { maxDepth: 1 },
 });
+productOption.virtual("suboptions", {
+  ref: "ProductOption",
+  localField: "_id",
+  foreignField: "parentOption",
+  match: { deleted: false },
+  autopopulate: { maxDepth: 1 },
+});
 productOption.plugin(require(`mongoose-autopopulate`));
 productOption.plugin(mongooseLeanVirtuals);
 productOption.set("toJSON", { virtuals: true });

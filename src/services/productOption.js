@@ -20,9 +20,10 @@ exports.add = async (sID, body) => {
         );
       }
 
-      const options = body.options.map((option) => ({
+      const options = body.map((option) => ({
         subcategory: data.id,
-        name: option,
+        name: option.name,
+        input_type: option.input_type,
       }));
 
       ProductOption.insertMany(options, (err, data) => {
