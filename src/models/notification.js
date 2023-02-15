@@ -10,16 +10,21 @@ const notificationSchema = mongoose.Schema(
       minlength: 3,
       trim: true,
     },
-    body: {
+    description: {
       type: String,
       required: true,
       trim: true,
     },
-    click_action: {
-        type: String,
-        required: false,
-        trim: true,
-      },
+    status: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    image: {
+      type: String,
+      required: false,
+      trim: true,
+    }
   },
   {
     timestamps: true,
