@@ -19,7 +19,7 @@ const paginate = (schema) => {
    * @param {number} [options.page] - Current page (default = 1)
    * @returns {Promise<QueryResult>}
    */
-  schema.statics.paginate = async function (filter, options) {
+  schema.statics.paginate = async function ({ search, filters }, options) {
     let sort = "";
     if (options.sortBy) {
       const sortingCriteria = [];
@@ -40,23 +40,46 @@ const paginate = (schema) => {
       options.page && parseInt(options.page, 10) > 0
         ? parseInt(options.page, 10)
         : 1;
-    const skip = (page - 1) * limit;
-    const countPromise = this.countDocuments(filter).exec();
 
-    let docsPromise = this.find(
-      filter.search != undefined
-        ? {
-            $text: {
-              $search: filter.search,
-            },
-            ...filter,
-          }
-        : filter
-    )
-      .collation({ locale: "en", strength: 2 })
-      .sort(sort)
-      .skip(skip)
-      .limit(limit);
+    const skip = (page - 1) * limit;
+
+    let filteredQuery = {};
+
+    if (filters) {
+      let query = [];
+      query = JSON.parse(filters);
+
+      for (let filter of query) {
+        let key = Object.keys(filter)[0];
+        let value = filter[key];
+
+        if (value.from && value.to) {
+          filteredQuery[key] = {
+            $gte: value.from,
+            $lte: value.to,
+          };
+        } else {
+          filteredQuery[key] = value;
+        }
+      }
+    }
+
+    if (search) {
+      filteredQuery = { ...filteredQuery, $text: { $search: search } };
+    }
+
+    const countPromise = this.countDocuments(filteredQuery).exec();
+
+    let docsPromise = this.find(filteredQuery)
+      .collation({
+        locale: "en",
+        strength: 2,
+      })
+      .sort(sort);
+
+    if (!(options.paginate === "false")) {
+      docsPromise = docsPromise.skip(skip).limit(limit);
+    }
 
     if (options.populate) {
       options.populate.split(",").forEach((populateOption) => {
@@ -76,10 +99,14 @@ const paginate = (schema) => {
       const totalPages = Math.ceil(totalResults / limit);
       const result = {
         results,
-        page,
-        limit,
-        totalPages,
-        totalResults,
+        metaData: {
+          page,
+          limit,
+          totalPages,
+          totalResults,
+          filter: filteredQuery,
+          sort,
+        },
       };
       return Promise.resolve(result);
     });

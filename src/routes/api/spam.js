@@ -3,14 +3,8 @@ const validate = require("../../middlewares/validate");
 const spamValidation = require("../../validations/spam");
 const spamController = require("../../controllers/spam");
 const router = express.Router();
-const passport = require('passport');
+const auth = require("../../middlewares/auth");
 
-router.post(
-  "",
-  passport.authenticate("jwt", { session: false }),
-  validate(spamValidation.add),
-  spamController.add
-);
-
+router.post("", auth(), validate(spamValidation.add), spamController.add);
 
 module.exports = router;

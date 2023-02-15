@@ -23,6 +23,7 @@ const userSchema = mongoose.Schema(
     auth_type: {
       type: String,
       enum: ["SOCIAL", "EMAIL"],
+      default: "EMAIL",
     },
     allergies: [
       {
@@ -30,6 +31,9 @@ const userSchema = mongoose.Schema(
         trim: true,
       },
     ],
+    code:{
+      type:String
+      },
     status: {
       type: String,
       default: "ACTIVE",
@@ -47,9 +51,14 @@ const userSchema = mongoose.Schema(
         }
       },
     },
+    imageURL: [
+      {
+        type: String,
+      },
+    ],
     password: {
       type: String,
-      required: true,
+      // required: true,
       trim: true,
       minlength: 6,
       validate(value) {
@@ -65,11 +74,6 @@ const userSchema = mongoose.Schema(
     isEmailVerified: {
       type: Boolean,
       default: false,
-    },
-
-    firebaseToken: {
-      type: String,
-      required: false,
     },
   },
   {

@@ -34,3 +34,21 @@ exports.delete= async (id) => {
   };
 
 
+
+exports.get = async (id) => {
+  return new Promise((resolve, reject) => {
+    Notification.findById(id, async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "Unable to find the notification", err)
+        );
+      }
+      if (!data) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "notification not found")
+        );
+      }
+      resolve(data);
+    });
+  });
+};

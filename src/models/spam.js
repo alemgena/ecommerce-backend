@@ -4,19 +4,17 @@ const { toJSON, paginate } = require("./plugins");
 
 const spamSchema = mongoose.Schema(
   {
-    productId: {
-      type: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      minlength: 3,
-      trim: true,
     },
 
-    reporterId: {
-        type: String,
-        required: true,
-        minlength: 3,
-        trim: true,
-      },
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
   
   },
   {

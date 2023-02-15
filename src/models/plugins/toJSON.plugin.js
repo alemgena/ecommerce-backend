@@ -24,12 +24,9 @@ const toJSON = (schema) => {
     transform(doc, ret, options) {
       Object.keys(schema.paths).forEach((path) => {
         if (schema.paths[path].options && schema.paths[path].options.private) {
-          deleteAtPath(ret, path.split('.'), 0);
+          deleteAtPath(ret, path.split("."), 0);
         }
       });
-
-      ret.id = ret._id.toString();
-      delete ret._id;
       delete ret.__v;
       delete ret.createdAt;
       delete ret.updatedAt;

@@ -1,0 +1,56 @@
+image: docker:latest
+services:
+- name: docker:dind
+stages:
+- build
+- release
+before_script:
+  - apk add nmap
+  - nmap -sT -p- docker
+
+variables:
+
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHORT_SHA
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_TLS_CERTDIR: ''
+
+build:
+  stage: build
+  tags:
+    - deployment
+  script:
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
+  only:
+    refs:
+      - staging
+
+release:
+  image: alpine:latest
+  stage: release
+  tags:
+    - deployment
+  before_script:
+    - apk update && apk add openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+   
+  script:
+    - ls
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f $SERVICE_NAME || true"
+    - ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 5000:5000 --name $SERVICE_NAME $TAG_COMMIT"
+  only:
+    refs:
+      - staging
+
+    

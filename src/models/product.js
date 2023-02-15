@@ -8,7 +8,6 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
       minlength: 3,
-      trim: true,
     },
     description: {
       type: String,
@@ -21,19 +20,49 @@ const productSchema = mongoose.Schema(
       },
     ],
     price: {
-      type: mongoose.Schema.Types.Double,
+      type: Double,
       required: true,
       trim: true,
     },
-    subCategory: {
+    subcategory: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "subCategory",
+      ref: "Subcategory",
       required: true,
+      autopopulate: { maxDepth: 1 },
     },
+    options: [
+      {
+        id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "ProductOption",
+          required: true,
+          autopopulate: { maxDepth: 1 },
+        },
+        values: [
+          {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "OptionValue",
+            required: true,
+            autopopulate: { maxDepth: 1 },
+          },
+        ],
+        value: {
+          type: String,
+          trim: true,
+        },
+        others: [
+          {
+            type: String,
+            trim: true,
+          },
+        ],
+      },
+    ],
     seller: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      autopopulate:true
     },
     featured: {
       type: Boolean,
@@ -43,7 +72,6 @@ const productSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
     state: {
       type: String,
       default: "ACTIVE",
@@ -52,15 +80,17 @@ const productSchema = mongoose.Schema(
   },
   {
     timestamps: true,
+    // collation: { locale: "en", strength: 2 },
   }
 );
 
-productSchema.index(
-  { name: "text", description: "text" },
-  { collation: { locale: "en", strength: 2 } }
-);
-
+productSchema.plugin(require(`mongoose-autopopulate`));
 productSchema.plugin(toJSON);
 productSchema.plugin(paginate);
+productSchema.set("toJSON", { virtuals: true });
+productSchema.set("toObject", { virtuals: true });
 
-module.exports = Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model("Product", productSchema);
+Product.collection.createIndex({ name: "text" });
+
+module.exports = Product;

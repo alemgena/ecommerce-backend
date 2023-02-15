@@ -11,5 +11,6 @@ router.post(
   authController.register
 );
 router.post("/login", validate(authValidation.login), authController.login);
-
+router.patch("/verify", authController.emailVerification);
+router.patch("/forgetPassword",authController.userForgetPassword)
 module.exports = router;

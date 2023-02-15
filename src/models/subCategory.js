@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { paginate, toJSON } = require("./plugins");
-
+const mongooseLeanVirtuals = require("mongoose-lean-virtuals");
 const subCategorySchema = mongoose.Schema(
   {
     name: {
@@ -40,7 +40,32 @@ subCategorySchema.index(
   { unique: true, partialFilterExpression: { deletedAt: { $eq: null } } }
 );
 
+subCategorySchema.statics.isNameTaken = async function (
+  name,
+  excludeSubCategoryId
+) {
+  const data = await this.findOne({ name, _id: { $ne: excludeSubCategoryId } });
+  return !!data;
+};
+subCategorySchema.virtual("product", {
+  ref: "Product",
+  localField: "_id",
+  foreignField: "subcategory",
+  match: { state: "ACTIVE" },
+});
+
+subCategorySchema.virtual("options", {
+  ref: "ProductOption",
+  localField: "_id",
+  foreignField: "subcategory",
+  match: { deleted: false },
+  autopopulate: true,
+});
+subCategorySchema.plugin(require(`mongoose-autopopulate`));
+subCategorySchema.plugin(mongooseLeanVirtuals);
+subCategorySchema.set("toJSON", { virtuals: true });
+subCategorySchema.set("toObject", { virtuals: true });
 subCategorySchema.plugin(paginate);
 subCategorySchema.plugin(toJSON);
 
-module.exports = subCategory = mongoose.model("subCategory", subCategorySchema);
+module.exports = Subcategory = mongoose.model("Subcategory", subCategorySchema);

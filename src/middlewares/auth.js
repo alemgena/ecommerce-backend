@@ -7,19 +7,20 @@ const verifyCallback = (req, resolve, reject) => async (err, user, info) => {
     return reject(new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate"));
   }
   req.user = user;
+  resolve();
   // await global.enforcer.addPolicy("admin", req.originalUrl, req.method);
   // await global.enforcer.addGroupingPolicy(user.id, "admin");
-  await global.enforcer.loadPolicy();
-  const res = await global.enforcer.enforce(
-    user.id,
-    req.originalUrl,
-    req.method
-  );
-  if (res) {
-    resolve();
-  } else {
-    return reject(new ApiError(httpStatus.FORBIDDEN, "Forbidden"));
-  }
+  // await global.enforcer.loadPolicy();
+  // const res = await global.enforcer.enforce(
+  //   user.id,
+  //   req.originalUrl,
+  //   req.method
+  // );
+  // if (res) {
+  //   resolve();
+  // } else {
+  //   return reject(new ApiError(httpStatus.FORBIDDEN, "Forbidden"));
+  // }
 };
 
 const auth = () => async (req, res, next) => {

@@ -2,17 +2,17 @@ const Joi = require("joi");
 
 const add = {
     body: Joi.object().keys({
-        productId: Joi.string().min(4).required().messages({
-            "string.base": "product Id must be a string",
-            "string.empty": "product Id cannot be empty field",
-            "string.min": "product Id must be longer than 4 characters",
-            "any.required": "product Id is a required field",
+        product: Joi.string().min(4).required().messages({
+            "string.base": "product  must be a string",
+            "string.empty": "product  cannot be empty field",
+            "string.min": "product  must be longer than 4 characters",
+            "any.required": "product  is a required field",
         }),
-        reporterId: Joi.string().required().min(4).messages({
-            "string.base": "reporter Id must be a string",
-            "string.empty": "reporter Id cannot be an empty field",
-            "string.min": "reporter Id must be longer than 4 characters",
-            "any.required": "reporter Id is a required field",
+        user: Joi.string().required().min(4).messages({
+            "string.base": "user must be a string",
+            "string.empty": "user cannot be an empty field",
+            "string.min": "user must be longer than 4 characters",
+            "any.required": "user Id is a required field",
         })
 
 
