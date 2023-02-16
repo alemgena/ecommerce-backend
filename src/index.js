@@ -6,14 +6,21 @@ const logger = require("./config/logger");
 const { newEnforcer } = require("casbin");
 const { MongooseAdapter } = require("casbin-mongoose-adapter");
 const path = require("path");
-
+let webhook = require('./webhook.js')
+let http = require('http').createServer(app)
+let io = require('socket.io')(http, {
+  cors: {
+    origin: '*',
+  }
+});
+webhook.start(io)
 let server;
 mongoose
   .connect(config.mongoose.url, config.mongoose.options)
   .then(async () => {
     logger.info("Connected to MongoDB");
     global.enforcer = await Casbin();
-    server = app.listen(config.port, () => {
+    server = http.listen(config.port, () => {
       logger.info(`Listening to port ${config.port}`);
     });
   });

@@ -25,7 +25,7 @@ exports.view = catchAsync(async (req, res) => {
 });
 
 exports.queryProducts = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ["filter", "search"]);
+  const filter = pick(req.query, ["filters", "search"]);
   const options = pick(req.query, [
     "sortBy",
     "limit",

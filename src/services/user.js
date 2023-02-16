@@ -33,12 +33,49 @@ exports.update = async (id, userData) => {
   );
   return updatedUser;
 };
-exports.view = async (id) => {
-  const user = await User.findOne({ _id: id });
-  if (!user) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "user not found");
-  }
-  return user;
+exports.get = async (id) => {
+  return new Promise((resolve, reject) => {
+    User.findById(id)
+      .exec(async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Error finding the user",
+              err
+            )
+          );
+        }
+        if (!data) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, "User not found")
+          );
+        }
+        resolve(data);
+      });
+  });
+};
+exports.list = async (id) => {
+  return new Promise((resolve, reject) => {
+    User.find({})
+      .exec(async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Error finding the users",
+              err
+            )
+          );
+        }
+        if (!data) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, "Users not found")
+          );
+        }
+        resolve(data);
+      });
+  });
 };
 
 exports.suspendAccount = async (id) => {

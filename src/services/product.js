@@ -27,21 +27,21 @@ exports.add = async (productData) => {
   }
 
   // Check if the option values exist
-  for (const value of productData.options.map((option) => option.values)) {
+  // poValuesID = productData.options.map((option) => option.values);
+  for (const option of productData.options) {
     const optionValues = await OptionValue.find({
-      _id: { $in: value },
+      _id: { $in: option.values },
+      option: option.id,
     });
-    if (
-      optionValues.length !==
-      productData.options.map((option) => option.values).length
-    ) {
-      throw new ApiError(
-        httpStatus.BAD_REQUEST,
-        "One or more options not found"
-      );
+    if (option.values?.length) {
+      if (optionValues.length !== option.values.length) {
+        throw new ApiError(
+          httpStatus.BAD_REQUEST,
+          "One or more options values not found"
+        );
+      }
     }
   }
-
   // Create the new product document
   const newProduct = new Product({
     ...productData,
@@ -51,8 +51,7 @@ exports.add = async (productData) => {
 
   // Save the new product to the database
   await newProduct.save();
-  return newProduct.populate("subcategory options.id options.values");
-  // });
+  return newProduct.populate();
 };
 
 exports.list = async () => {

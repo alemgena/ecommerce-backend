@@ -9,13 +9,6 @@ const add = {
             "any.required": "product is a required field",
         }),
 
-        user: Joi.string().min(4).required().messages({
-            "string.base": "user must be a string",
-            "string.empty": "user cannot be empty field",
-            "string.min": "user must be longer than 4 characters",
-            "any.required": "user is a required field",
-        }),
-
     }),
 };
 

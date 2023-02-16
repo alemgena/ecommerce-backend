@@ -19,7 +19,7 @@ const paginate = (schema) => {
    * @param {number} [options.page] - Current page (default = 1)
    * @returns {Promise<QueryResult>}
    */
-  schema.statics.paginate = async function (filter, options) {
+  schema.statics.paginate = async function ({ search, filters }, options) {
     let sort = "";
     if (options.sortBy) {
       const sortingCriteria = [];
@@ -42,28 +42,35 @@ const paginate = (schema) => {
         : 1;
 
     const skip = (page - 1) * limit;
-    const obj = {};
 
-    if (filter.filter) {
-      const arr = filter.filter.split(",");
+    let filteredQuery = {};
 
-      arr.forEach((item) => {
-        const keyValue = item.split(":");
-        obj[keyValue[0]] = keyValue[1];
-      });
+    if (filters) {
+      let query = [];
+      query = JSON.parse(filters);
+
+      for (let filter of query) {
+        let key = Object.keys(filter)[0];
+        let value = filter[key];
+
+        if (value.from && value.to) {
+          filteredQuery[key] = {
+            $gte: value.from,
+            $lte: value.to,
+          };
+        } else {
+          filteredQuery[key] = value;
+        }
+      }
     }
 
-    const newFilter = {
-      ...obj,
-      ...(filter.search != undefined && {
-        $text: {
-          $search: filter.search,
-        },
-      }),
-    };
-    const countPromise = this.countDocuments(newFilter).exec();
+    if (search) {
+      filteredQuery = { ...filteredQuery, $text: { $search: search } };
+    }
 
-    let docsPromise = this.find(newFilter)
+    const countPromise = this.countDocuments(filteredQuery).exec();
+
+    let docsPromise = this.find(filteredQuery)
       .collation({
         locale: "en",
         strength: 2,
@@ -92,7 +99,14 @@ const paginate = (schema) => {
       const totalPages = Math.ceil(totalResults / limit);
       const result = {
         results,
-        metaData: { page, limit, totalPages, totalResults, filter: obj, sort },
+        metaData: {
+          page,
+          limit,
+          totalPages,
+          totalResults,
+          filter: filteredQuery,
+          sort,
+        },
       };
       return Promise.resolve(result);
     });

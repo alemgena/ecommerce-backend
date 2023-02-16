@@ -50,7 +50,7 @@ subCategorySchema.statics.isNameTaken = async function (
 subCategorySchema.virtual("product", {
   ref: "Product",
   localField: "_id",
-  foreignField: "subCategory",
+  foreignField: "subcategory",
   match: { state: "ACTIVE" },
 });
 
@@ -58,7 +58,7 @@ subCategorySchema.virtual("options", {
   ref: "ProductOption",
   localField: "_id",
   foreignField: "subcategory",
-  match: { deletedAt: null },
+  match: { deleted: false },
   autopopulate: true,
 });
 subCategorySchema.plugin(require(`mongoose-autopopulate`));

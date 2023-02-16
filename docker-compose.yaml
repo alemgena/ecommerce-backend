@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+
+  ecommerce-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: ecommerce-api
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env.test
+    command: ['npm', 'start']
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

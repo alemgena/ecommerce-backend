@@ -1,3 +1,5 @@
+const { Module } = require("module");
+
 module.exports.User = require("./user");
 module.exports.Product = require("./product");
 module.exports.Category = require("./category");
@@ -11,8 +13,10 @@ module.exports.HouseAdvertisement = require("./houseAdvertisement");
 module.exports.Adds = require("./adds");
 module.exports.FeedBack = require("./feedBack");
 module.exports.AddsView = require("./addsViews");
-
+module.exports.Shop=require('./shop')
+module.exports.Favourite=require('./favourite')
 module.exports.ActivityLog = require("./activityLog");
 module.exports.ProductOption = require("./productOption");
-module.exports.OptionValue = require("./productOptionsValue");
+module.exports.OptionValue = require("./optionsValue");
 module.exports.ProductVariant = require("./productVariant");
+module.exports.Chat=require('./chat')

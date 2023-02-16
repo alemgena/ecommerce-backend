@@ -1,8 +1,7 @@
 const httpStatus = require("http-status");
-const { Category, subCategory } = require("../models");
+const { Category, Subcategory } = require("../models");
 const ApiError = require("../utils/ApiError");
 exports.add = async (categoryBody) => {
-  
   if (await Category.isNameTaken(categoryBody.name)) {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
@@ -12,7 +11,7 @@ exports.add = async (categoryBody) => {
   return Category.create(categoryBody);
 };
 exports.list = async () => {
-  return Category.find({}).populate('subcategory');
+  return Category.find({}).populate("subcategory");
 };
 exports.update = async (id, updateBody) => {
   const category = await Category.findById(id);
@@ -41,17 +40,16 @@ exports.delete = async (id) => {
       if (!data) {
         return reject(new ApiError(httpStatus.NOT_FOUND, "category not found"));
       }
-      data.deletedAt = Date.now();
-      await data.save();
+      await data.delete();
       resolve(data);
     });
   });
 };
 exports.listSubCategories = async (id) => {
-  return await subCategory.find(
+  return await Subcategory.find(
     { category: id, deletedAt: null },
     { category: 0, deletedAt: 0 }
-  ).populate('product');
+  );
 };
 
 exports.get = async (id) => {
