@@ -14,6 +14,12 @@ const register = {
       "string.min": "last name must be longer than 4 characters",
       "any.required": "last name is a required field",
     }),
+    phone: Joi.string().required().min(4).messages({
+      "string.base": "phone must be a string",
+      "string.empty": " phone cannot be an empty field",
+      "string.min": "phone must be longer than 4 characters",
+      "any.required": "phone is a required field",
+    }),
     email: Joi.string().email().required().messages({
       "string.base": "email must be a string",
       "string.email": "must enter a valid email",
@@ -28,10 +34,9 @@ const register = {
     }),
   }),
 };
-
 const login = {
   body: Joi.object().keys({
-    email: Joi.string().email().required().messages({
+    input: Joi.string().required().messages({
       "string.base": "email must be a string",
       "string.email": "must enter a valid email",
       "string.empty": "email is required",
@@ -45,7 +50,6 @@ const login = {
     }),
   }),
 };
-
 module.exports = {
   register,
   login,
