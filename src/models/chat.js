@@ -22,14 +22,17 @@ const chatSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
+    autopopulate:true
   },
   to: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
+    autopopulate:true
   },
   createdAt: { type: Date, default: new Date(fullDate) },
 });
 chatSchema.plugin(toJSON);
 chatSchema.plugin(paginate);
+chatSchema.plugin(require(`mongoose-autopopulate`));
 module.exports = Chat = mongoose.model("Chat", chatSchema);

@@ -6,7 +6,6 @@ const chatController = require("../../controllers/chat");
 const chatValidation = require("../../validations/chat");
 const router = express.Router();
 router.post("", auth(), validate(chatValidation.add), chatController.add);
-router.get("", chatController.get);
-router.get("/list", chatController.list);
-
+router.get("",auth(), chatController.get);
+router.get("/list",auth(),chatController.list);
 module.exports = router;
