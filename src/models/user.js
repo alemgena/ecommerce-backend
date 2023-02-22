@@ -16,9 +16,9 @@ const userSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    phone:{
-type:String,
-require:true
+    phone: {
+      type: String,
+      require: true,
     },
     profile_picture: {
       type: String,
@@ -35,9 +35,9 @@ require:true
         trim: true,
       },
     ],
-    code:{
-      type:String
-      },
+    code: {
+      type: String,
+    },
     status: {
       type: String,
       default: "ACTIVE",
@@ -55,11 +55,10 @@ require:true
         }
       },
     },
-    imageURL: [
-      {
-        type: String,
-      },
-    ],
+    imageURL: {
+      type: String,
+    },
+
     password: {
       type: String,
       // required: true,
