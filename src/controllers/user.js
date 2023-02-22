@@ -8,7 +8,7 @@ const httpStatus = require("http-status");
 exports.changeUserPassword = catchAsync(async (req, res) => {
   const id = req.user.id;
   const data = await user.changePassword(id, req.body);
-  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
+  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "Password changed successfully", data));
 });
 exports.activateUserAccount = catchAsync(async (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
