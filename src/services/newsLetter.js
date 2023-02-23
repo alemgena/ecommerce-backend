@@ -28,7 +28,7 @@ exports.add = async (userID) => {
             )
           );
         }
-        resolve(data.populate("User"));
+        resolve(data.populate("userID"));
       });
     });
   });

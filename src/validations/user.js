@@ -11,10 +11,6 @@ const changePassword = {
       "string.empty": "old password is required",
       "any.required": "old password is a required field",
     }),
-    id: Joi.string().min(4).required().messages({
-      "any.required": "id is a required field",
-    }),
-
   }),
 };
 module.exports = {

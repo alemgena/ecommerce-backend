@@ -17,11 +17,15 @@ exports.add = async (productData) => {
   }
 
   // Check if the options exist
-  const optionIds = productData.options.map((option) => option.id);
+  const optionIds = productData.options
+    .filter((option) => option.suboption === false)
+    .map((option) => option.id);
+
   const options = await ProductOption.find({
     _id: { $in: optionIds },
     subcategory: productData.subcategory,
   });
+
   if (options.length !== optionIds.length) {
     throw new ApiError(httpStatus.BAD_REQUEST, "One or more options not found");
   }
@@ -95,15 +99,20 @@ exports.uploadProductImages = async (files, id) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, "product not found");
   }
-  let images = [];
-  for (let type of files) {
-    let imageUri = `images/${type.filename}`;
-    images.push(imageUri);
-  }
-  product.imagesURL = images;
-  await product.save();
+  // let images = [];
+  // for (let type of files) {
+  //   let imageUri = `images/${type.filename}`;
+  const images = files.map((type) => ({
+    imageUri: `images/${type.filename}`,
+    productId: product._id,
+  }));
+  // }
+  return await ProductImage.insertMany(images);
 
-  return "Upload Images Successfully ";
+  // product.imagesURL = images;
+  // await product.save();
+
+  // return "Upload Images Successfully ";
 };
 exports.delete = async (id) => {
   const product = await Product.findById(id);
