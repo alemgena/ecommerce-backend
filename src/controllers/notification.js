@@ -42,7 +42,7 @@ exports.sendNotification = catchAsync(async (req, res) => {
   var notification = req.body.notification;
   var to = req.body.to;
 
-  axios
+ await axios
     .post("/https://fcm.googleapis.com/fcm/send", {
       notification: notification,
       to: to,
@@ -56,7 +56,7 @@ exports.sendNotification = catchAsync(async (req, res) => {
       throw new ApiError(
         httpStatus.BAD_REQUEST,
         "error sending the notification",
-        err
+        error
       );
     });
 });
