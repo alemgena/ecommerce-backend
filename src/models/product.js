@@ -24,6 +24,11 @@ const productSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    viewCount: {
+      type: Double,
+      required: false,
+      trim: true,
+    },
     subcategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subcategory",

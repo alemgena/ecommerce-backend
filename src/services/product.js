@@ -60,6 +60,7 @@ exports.list = async () => {
 
 exports.view = async (id) => {
   const product = await Product.findOne({ _id: id });
+  
   if (!product) {
     throw new ApiError(httpStatus.BAD_REQUEST, "product not found");
   }
@@ -69,6 +70,12 @@ exports.view = async (id) => {
     .equals(subCategory);
 
   var response = { product, relatedProducts };
+  
+  var viewCount = product.viewCount;
+  var newViewCount = viewCount + 1;
+  product.viewCount = newViewCount;
+  product.save()
+  
   return response;
 };
 
