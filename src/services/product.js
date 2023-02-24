@@ -72,7 +72,13 @@ exports.view = async (id) => {
   var response = { product, relatedProducts };
   
   var viewCount = product.viewCount;
-  var newViewCount = viewCount + 1;
+  var newViewCount
+  if(viewCount){
+  newViewCount = viewCount + 1;
+  }
+  else{
+    newViewCount=1
+  }
   product.viewCount = newViewCount;
   product.save()
   

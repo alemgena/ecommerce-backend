@@ -25,7 +25,7 @@ const productSchema = mongoose.Schema(
       trim: true,
     },
     viewCount: {
-      type: Double,
+      type: Number,
       required: false,
       trim: true,
     },
