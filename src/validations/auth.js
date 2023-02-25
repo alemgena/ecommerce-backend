@@ -26,6 +26,9 @@ const register = {
       "string.empty": "email is required",
       "any.required": "email is a required field",
     }),
+    imageURL: Joi.string().messages({
+      "string.base": "imageURL must be a string",
+    }),
     password: Joi.string().min(6).required().messages({
       "string.base": "password must be a string",
       "string.empty": "password is required",
