@@ -14,11 +14,12 @@ const advertisement = require("./houseAdvertisement");
 const adds = require("./adds");
 const feedBack = require("./feedBack");
 const productVariant = require("./variant");
-const shop=require("./shop")
-const addsView=require('./addsView')
+const shop = require("./shop");
+const addsView = require("./addsView");
 const productOption = require("./options");
 const optionValues = require("./optionValues");
-const chat=require('./chat')
+const chat = require("./chat");
+const review = require("./review");
 const Routers = {
   auth,
   product,
@@ -41,6 +42,7 @@ const Routers = {
   productVariant,
   productOption,
   optionValues,
+  review,
 };
 
 module.exports = Routers;
