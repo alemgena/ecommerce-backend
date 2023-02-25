@@ -1,7 +1,6 @@
 const httpStatus = require("http-status");
 const {
   Product,
-  ProductImage,
   OptionValue,
   ProductOption,
   Subcategory,
@@ -64,7 +63,7 @@ exports.list = async () => {
 
 exports.view = async (id) => {
   const product = await Product.findOne({ _id: id });
-  
+
   if (!product) {
     throw new ApiError(httpStatus.BAD_REQUEST, "product not found");
   }
@@ -74,18 +73,17 @@ exports.view = async (id) => {
     .equals(subCategory);
 
   var response = { product, relatedProducts };
-  
+
   var viewCount = product.viewCount;
-  var newViewCount
-  if(viewCount){
-  newViewCount = viewCount + 1;
-  }
-  else{
-    newViewCount=1
+  var newViewCount;
+  if (viewCount) {
+    newViewCount = viewCount + 1;
+  } else {
+    newViewCount = 1;
   }
   product.viewCount = newViewCount;
-  product.save()
-  
+  product.save();
+
   return response;
 };
 
@@ -112,20 +110,11 @@ exports.uploadProductImages = async (files, id) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, "product not found");
   }
-  // let images = [];
-  // for (let type of files) {
-  //   let imageUri = `images/${type.filename}`;
-  const images = files.map((type) => ({
-    imageUri: `images/${type.filename}`,
-    productId: product._id,
-  }));
-  // }
-  return await ProductImage.insertMany(images);
 
-  // product.imagesURL = images;
-  // await product.save();
+  const images = files.map((type) => `images/${type.filename}`);
 
-  // return "Upload Images Successfully ";
+  product.imagesURL = images;
+  return await product.save();
 };
 exports.delete = async (id) => {
   const product = await Product.findById(id);
@@ -141,20 +130,4 @@ exports.delete = async (id) => {
   });
   await product.save();
   return product;
-};
-exports.viewProductImage = async (id) => {
-  const productImage = await ProductImage.find({ productId: id }).populate({
-    path: "productId",
-    match: { state: "ACTIVE" },
-  });
-  if (!productImage) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "product image not found");
-  }
-  return productImage;
-};
-exports.viewImages = async () => {
-  return ProductImage.find({}).populate({
-    path: "productId",
-    match: { state: "ACTIVE" },
-  });
 };
