@@ -25,7 +25,7 @@ exports.update = catchAsync(async (req, res) => {
   const original = await category.get(req.params.id);
   const udatedCategory = await category.update(req.params.id, req.body);
   res.status(httpStatus.OK).send(
-    new SuccessResponse(httpStatus.OK, "", {
+    new SuccessResponse(httpStatus.OK, "Category successfully updated", {
       original: original,
       edited: udatedCategory,
     })
@@ -36,7 +36,13 @@ exports.delete = catchAsync(async (req, res) => {
   const deletedCategory = await category.delete(req.params.id);
   res
     .status(httpStatus.OK)
-    .send(new SuccessResponse(httpStatus.OK, "", deletedCategory));
+    .send(
+      new SuccessResponse(
+        httpStatus.OK,
+        "Category successfully deleted",
+        deletedCategory
+      )
+    );
 });
 
 exports.listSubCategories = catchAsync(async (req, res) => {

@@ -43,6 +43,9 @@ const add = {
             "any.required": "option values are required",
           })
         ),
+        suboption: Joi.boolean().default(false).messages({
+          "string.base": "suboption value must be a boolean",
+        }),
         value: Joi.string().messages({
           "string.base": "value must be a string",
           "string.empty": "value cannot be an empty field",
