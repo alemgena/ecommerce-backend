@@ -1,17 +1,12 @@
 const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
 const { feedBack } = require("../services");
-const ObjectID = require("mongodb").ObjectId;
 const SuccessResponse = require("../utils/successResponse");
-const ApiError = require("../utils/ApiError");
 
 exports.add = catchAsync(async (req, res) => {
-  if (!ObjectID.isValid(req.body.userId)) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User Id is not valid");
-  }
-  const data = await feedBack.add(req.body);
+  const data = await feedBack.add({ ...req.body, userId: req.user._id });
   res
-    .status(httpStatus.OK)
+    .status(httpStatus.CREATED)
     .send(new SuccessResponse(httpStatus.CREATED, "", data));
 });
 

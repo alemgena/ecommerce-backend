@@ -26,6 +26,9 @@ const register = {
       "string.empty": "email is required",
       "any.required": "email is a required field",
     }),
+    imageURL: Joi.string().messages({
+      "string.base": "imageURL must be a string",
+    }),
     password: Joi.string().min(6).required().messages({
       "string.base": "password must be a string",
       "string.empty": "password is required",
@@ -37,10 +40,9 @@ const register = {
 const login = {
   body: Joi.object().keys({
     input: Joi.string().required().messages({
-      "string.base": "email must be a string",
-      "string.email": "must enter a valid email",
-      "string.empty": "email is required",
-      "any.required": "email is a required field",
+      "string.base": "input must be a string",
+      "string.empty": "input is required",
+      "any.required": "input is a required field",
     }),
     password: Joi.string().min(6).required().messages({
       "string.base": "password must be a string",

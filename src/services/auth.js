@@ -76,21 +76,24 @@ exports.register = async (userBody) => {
   });
 };
 exports.loginUserWithEmailAndPassword = async (input, password) => {
-  return new Promise(async(resolve, reject) => {
-    User.findOne({ "$or": [ { email: input }, { phone: input} ] },async (err, data) => {
-      if (err) {
-        return reject(
-          new ApiError(httpStatus.UNAUTHORIZED, "Unable to login",)
-        );
-      }
+  return new Promise(async (resolve, reject) => {
+    User.findOne(
+      { $or: [{ email: input }, { phone: input }] },
+      async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(httpStatus.UNAUTHORIZED, "Unable to login")
+          );
+        }
 
-      if ( !data || ! await data.isPasswordMatch(password)) {
-        return reject(
-          new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password")
-        );
+        if (!data || !(await data.isPasswordMatch(password))) {
+          return reject(
+            new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password")
+          );
+        }
+        resolve(data);
       }
-      resolve(data);
-    });
+    );
   });
 };
 exports.emailVerify = async (email, code) => {

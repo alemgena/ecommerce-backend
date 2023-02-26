@@ -14,10 +14,7 @@ exports.add = catchAsync(async (req, res) => {
 
 exports.list = catchAsync(async (req, res) => {
   const data = await notification.list();
-  res.status(200).send(data);
-  res
-    .status(httpStatus.OK)
-    .send(new SuccessResponse(httpStatus.CREATED, "", data));
+  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
 });
 
 exports.update = catchAsync(async (req, res) => {
