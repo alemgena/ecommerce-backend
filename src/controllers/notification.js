@@ -41,22 +41,29 @@ exports.delete = catchAsync(async (req, res) => {
 exports.sendNotification = catchAsync(async (req, res) => {
   var notification = req.body.notification;
   var to = req.body.to;
-
- await axios
-    .post("/https://fcm.googleapis.com/fcm/send", {
-      notification: notification,
-      to: to,
-    })
-    .then(function (response) {
-      res
-        .status(httpStatus.OK)
-        .send(new SuccessResponse(httpStatus.OK, "", notification));
-    })
-    .catch(function (error) {
-      throw new ApiError(
-        httpStatus.BAD_REQUEST,
-        "error sending the notification",
-        error
-      );
-    });
+  console.log(notification)
+  console.log(to)
+const apiKey= "AAAAvAXvcFc:APA91bE9TVDEwv3ygPjnulh5Nm-jmwsppfb9E_twYMQZEMP5HrtCqG_R3wq5SBjvlotm30_shJEyXrKmFekuKTAPRGf1Eumhsoc7U21bhV9IO9qvR7UiYh54gg821_MLdxt_8EKBcu2u"
+const headers = {
+  Authorization: `key=${apiKey}`
+}
+const data = { notification: 
+  req.body.notification
+  ,
+  to: req.body.to
+}
+const url = 'https://fcm.googleapis.com/fcm/send';
+console.log("Ffff")
+await axios.post(url, data, {headers}).then(function (response) {
+  res
+    .status(httpStatus.OK)
+    .send(new SuccessResponse(httpStatus.OK, "", response.data));
+})
+.catch(function (error) {
+  throw new ApiError(
+    httpStatus.BAD_REQUEST,
+    "error sending the notification",
+    error
+  );
+});
 });

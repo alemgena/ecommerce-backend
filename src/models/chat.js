@@ -30,6 +30,11 @@ const chatSchema = new mongoose.Schema({
     required: true,
     autopopulate:true
   },
+  roomId: {
+    type: Number,
+    required: false,
+    trim: true,
+  },
   createdAt: { type: Date, default: new Date(fullDate) },
 });
 chatSchema.plugin(toJSON);

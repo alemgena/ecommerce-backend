@@ -11,13 +11,13 @@ module.exports = {
     socket.join(data);
   });
   socket.on("send_message", async(data) => {
-    socket.to(data.room).emit("receive_message", data);
+    socket.to(data.roomId).emit("receive_message", data);
   });
   //chatImage
   socket.on("chatImage",async(data) => {
     socket.to(data.room).emit("chatImage", data);
   });
-  socket.on("disconnect", () => {
+  socket.on("socket-disconnect", () => {
     socket.emit("disconnect", "Ws disconnect");
   });
     });
