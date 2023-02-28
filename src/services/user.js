@@ -22,16 +22,27 @@ exports.activateAccount = async (id) => {
 };
 
 exports.update = async (id, userData) => {
-  const user = await User.findOne({ _id: id });
-  if (!user) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "user not found");
-  }
-  const updatedUser = await User.findOneAndUpdate(
-    id,
-    { $set: userData },
-    { returnOriginal: false }
-  );
-  return updatedUser;
+  return new Promise((resolve, reject) => {
+    User.findById(id, async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(
+            httpStatus.NOT_FOUND,
+            "Error finding the user",
+            err
+          )
+        );
+      }
+      if (!data) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "User not found")
+        );
+      }
+      Object.assign(data, userData);
+      data.save();
+      resolve(data);
+    });
+  });
 };
 exports.get = async (id) => {
   return new Promise((resolve, reject) => {
