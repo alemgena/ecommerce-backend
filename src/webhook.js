@@ -18,7 +18,7 @@ module.exports = {
     socket.to(data.room).emit("chatImage", data);
   });
   socket.on("disconnect", () => {
-    socket.emit("disconnect", "Ws disconnect");
+  
   });
     });
   },

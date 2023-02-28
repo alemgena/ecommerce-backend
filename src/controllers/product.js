@@ -7,7 +7,14 @@ const ObjectID = require("mongodb").ObjectId;
 const SuccessResponse = require("../utils/successResponse");
 const ApiError = require("../utils/ApiError");
 exports.add = catchAsync(async (req, res) => {
-  const body = { seller: req.user.id, ...req.body };
+  const body = {
+    seller: req.user.id,
+    location: {
+      type: "Point",
+      coordinates: [req.body.longitude, req.body.latitude],
+    },
+    ...req.body,
+  };
   const data = await product.add(body);
   res
     .status(httpStatus.CREATED)
@@ -88,4 +95,3 @@ exports.delete = catchAsync(async (req, res) => {
       )
     );
 });
-
