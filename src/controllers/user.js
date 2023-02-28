@@ -37,11 +37,14 @@ exports.suspendUserAccount = catchAsync(async (req, res) => {
 exports.update = catchAsync(async (req, res) => {
   const original = await user.get(req.user.id);
   await uploadImage(req, res);
+  let body
   let imageURL;
   if (req.file) {
     imageURL = `/images/user/${req.file.filename}`;
+    body = { imageURL: imageURL, ...req.body };
+  } else {
+    body = req.body;
   }
-  const body = { imageURL: imageURL, ...req.body };
   const data = await user.update(req.user.id, body);
 
   res.status(httpStatus.OK).send(
