@@ -16,7 +16,8 @@ const productVariant = require("./variant");
 const shop=require("./shop")
 const productOption = require("./options");
 const optionValues = require("./optionValues");
-const chat=require('./chat')
+const chat = require("./chat");
+const review = require("./review");
 const Routers = {
   auth,
   product,
@@ -38,6 +39,7 @@ const Routers = {
   productVariant,
   productOption,
   optionValues,
+  review,
 };
 
 module.exports = Routers;
