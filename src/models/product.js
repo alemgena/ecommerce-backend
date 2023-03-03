@@ -31,17 +31,17 @@ const productSchema = mongoose.Schema(
     },
     region:{
     type: String,
-    required: true,
+   // required: true,
     },
     location: {
       type: {
         type: String, // Don't do `{ location: { type: String } }`
         enum: ['Point'], // 'location.type' must be 'Point'
-        required: true
+       // required: true
       },
       coordinates: {
         type: [Number],
-        required: true
+       // required: true
       }
     },
     subcategory: {
