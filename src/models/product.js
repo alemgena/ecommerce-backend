@@ -44,6 +44,7 @@ const productSchema = mongoose.Schema(
        // required: true
       }
     },
+    
     subcategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subcategory",
