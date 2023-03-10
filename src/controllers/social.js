@@ -3,15 +3,13 @@ const axios = require("axios");
 const config = require("../config/config");
 const httpStatus = require("http-status");
 const SuccessResponse = require("../utils/successResponse");
+const catchAsync = require("../utils/catchAsync");
 
-exports.google = async (req, res) => {
+exports.google = catchAsync(async (req, res) => {
   const { access_token } = req.query;
-  const response = await axios.get(
-    `${config.GOOGLE_USERINFO}${access_token}${access_token}`
-  );
-  const data = await social.google(response.data);
-  const tokens = await token.generateAuthTokens(data);
+  const user = await social.google(access_token);
+  const tokens = await token.generateAuthTokens(user);
   res
     .status(httpStatus.OK)
     .send(new SuccessResponse(httpStatus.OK, "", { user, tokens }));
-};
+});
