@@ -11,7 +11,26 @@ exports.add = async (categoryBody) => {
   return Category.create(categoryBody);
 };
 exports.list = async () => {
-  return Category.find({}).populate("subcategory");
+  return new Promise((resolve, reject) => {
+    Category.find({}).populate("subcategory")
+      .exec(async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Error finding the  category",
+              err
+            )
+          );
+        }
+        if (!data) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, " categories not found")
+          );
+        }
+        resolve(data);
+      });
+  });
 };
 exports.update = async (id, updateBody) => {
   const category = await Category.findById(id);
@@ -49,7 +68,7 @@ exports.listSubCategories = async (id) => {
   return await Subcategory.find(
     { category: id, deletedAt: null },
     { category: 0, deletedAt: 0 }
-  );
+  ).populate('product');
 };
 
 exports.get = async (id) => {

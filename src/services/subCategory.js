@@ -105,3 +105,28 @@ exports.get = async (id) => {
       });
   });
 };
+exports.getByName = async (name) => {
+  return new Promise((resolve, reject) => {
+    Subcategory.findOne({ name: name }).collation(
+      { locale: 'en', strength: 2 }
+    )
+      .populate("product")
+      .exec(async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Error finding the sub category",
+              err
+            )
+          );
+        }
+        if (!data) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, "Sub category not found")
+          );
+        }
+        resolve(data);
+      });
+  });
+};
