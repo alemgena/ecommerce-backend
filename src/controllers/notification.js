@@ -2,6 +2,7 @@ const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
 const { notification } = require("../services");
 const axios = require("axios");
+const config = require("../config/config");
 const SuccessResponse = require("../utils/successResponse");
 const ApiError = require("../utils/ApiError");
 
@@ -39,13 +40,8 @@ exports.delete = catchAsync(async (req, res) => {
 });
 
 exports.sendNotification = catchAsync(async (req, res) => {
-  var notification = req.body.notification;
-  var to = req.body.to;
-  console.log(notification)
-  console.log(to)
-const apiKey= "AAAAvAXvcFc:APA91bE9TVDEwv3ygPjnulh5Nm-jmwsppfb9E_twYMQZEMP5HrtCqG_R3wq5SBjvlotm30_shJEyXrKmFekuKTAPRGf1Eumhsoc7U21bhV9IO9qvR7UiYh54gg821_MLdxt_8EKBcu2u"
 const headers = {
-  Authorization: `key=${apiKey}`
+  Authorization: `key=${config.apiKey}`
 }
 const data = { notification: 
   req.body.notification
@@ -53,7 +49,6 @@ const data = { notification:
   to: req.body.to
 }
 const url = 'https://fcm.googleapis.com/fcm/send';
-console.log("Ffff")
 await axios.post(url, data, {headers}).then(function (response) {
   res
     .status(httpStatus.OK)

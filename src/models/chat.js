@@ -32,8 +32,6 @@ const chatSchema = new mongoose.Schema({
   },
   roomId: {
     type: Number,
-    required: false,
-    trim: true,
   },
   createdAt: { type: Date, default: new Date(fullDate) },
 });

@@ -16,7 +16,7 @@ const add = {
       "string.empty": "product cannot be empty field",
     }),
 
-    roomId: Joi.number().required().messages({
+    roomId: Joi.number().messages({
       "string.base": "roomId must be a number",
       "string.empty": "roomId cannot be an empty field",
     }),
