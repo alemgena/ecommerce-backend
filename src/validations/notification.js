@@ -18,8 +18,15 @@ const add = {
       "string.base": "status must be a string",
       "any.required": "status is a required field",
     }),
+    type: Joi.string().required().messages({
+      "string.base": "type must be a string",
+      "any.required": "type is a required field",
+    }),
     image: Joi.string().messages({
       "string.base": "image must be a string",
+    }),
+    body: Joi.string().messages({
+      "string.base": "body must be a string",
     }),
   }),
 };
