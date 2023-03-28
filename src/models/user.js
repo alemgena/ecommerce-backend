@@ -20,6 +20,7 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    
     device_token: {
       type: String,
     },
