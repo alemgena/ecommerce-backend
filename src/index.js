@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const app = require("./app");
 const config = require("./config/config");
 const logger = require("./config/logger");
-
 const { newEnforcer } = require("casbin");
 const { MongooseAdapter } = require("casbin-mongoose-adapter");
 const path = require("path");
@@ -14,6 +13,7 @@ let io = require('socket.io')(http, {
   }
 });
 webhook.start(io)
+
 let server;
 mongoose
   .connect(config.mongoose.url, config.mongoose.options)

@@ -17,8 +17,8 @@ module.exports = {
   socket.on("chatImage",async(data) => {
     socket.to(data.room).emit("chatImage", data);
   });
-  socket.on("socket-disconnect", () => {
-    socket.emit("disconnect", "Ws disconnect");
+
+  socket.on("disconnect", () => {
   });
     });
   },

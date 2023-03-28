@@ -65,6 +65,7 @@ app.use("/api/options", routers.productOption);
 app.use("/api/values", routers.optionValues);
 app.use("/api/chat", routers.chat);
 app.use("/api/spams", routers.spam);
+app.use("/api/reviews", routers.review);
 app.use((req, res, next) => {
   next(new ApiError(res, httpStatus.NOT_FOUND, "Not found"));
 });
