@@ -18,3 +18,4 @@ module.exports.OptionValue = require("./optionsValue");
 module.exports.ProductVariant = require("./productVariant");
 module.exports.Chat = require("./chat");
 module.exports.Review = require("./review");
+module.exports.Region = require("./region");
