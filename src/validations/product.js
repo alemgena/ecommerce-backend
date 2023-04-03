@@ -8,6 +8,11 @@ const add = {
       "string.min": "product name must be longer than 4 characters",
       "any.required": "product name is a required field",
     }),
+    location: Joi.string().required().messages({
+      "string.base": "location must be a string",
+      "string.empty": "location cannot be empty field",
+      "any.required": "location is a required field",
+    }),
     region: Joi.string().required().messages({
       "string.base": " region must be a string",
       "string.empty": "region cannot be empty field",
@@ -29,16 +34,6 @@ const add = {
     //   "string.empty": "subCategory cannot be an empty field",
     //   "any.required": "subCategory is a required field",
     // }),
-    longitude: Joi.number().required().messages({
-      "string.base": "longitude must be a number",
-      "string.empty": "longitude cannot be an empty field",
-      "any.required": "longitude is a required field",
-    }),
-    latitude: Joi.number().required().messages({
-      "string.base": "latitude must be a number",
-      "string.empty": "latitude cannot be an empty field",
-      "any.required": "latitude is a required field",
-    }),
     price: Joi.number().required().messages({
       "string.base": "price must be a number",
       "string.empty": "price cannot be an empty field",

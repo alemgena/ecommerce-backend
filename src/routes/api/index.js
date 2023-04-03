@@ -18,10 +18,11 @@ const productOption = require("./options");
 const optionValues = require("./optionValues");
 const chat = require("./chat");
 const review = require("./review");
+const region=require('./region')
 const Routers = {
   auth,
   product,
-  
+  region,
   chat,
   category,
   user,
