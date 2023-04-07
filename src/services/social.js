@@ -6,13 +6,14 @@ const ApiError = require("../utils/ApiError");
 const auth = require("./auth");
 exports.google = async (access_token) => {
   return axios
-    .get(`${config.GOOGLE_USERINFO}${access_token}`)
+     .get(`${config.GOOGLE_USERINFO}${access_token}`)
     .then((response) => {
       return response.data;
     })
     .then(async (user) => {
-      if (await User.isEmailTaken(user.email)) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+      const data = await User.findOne({ email: user.email });
+      if (data) {
+        return data;
       }
 
       const payload = {
