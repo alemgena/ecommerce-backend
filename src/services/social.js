@@ -4,6 +4,7 @@ const config = require("../config/config");
 const { User } = require("../models");
 const ApiError = require("../utils/ApiError");
 const auth = require("./auth");
+
 exports.google = async (access_token) => {
   return axios
      .get(`${config.GOOGLE_USERINFO}${access_token}`)
