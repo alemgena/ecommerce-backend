@@ -52,7 +52,18 @@ const login = {
     }),
   }),
 };
+const refresh = {
+  body: Joi.object().keys({
+    token: Joi.string().required().messages({
+      "string.base": "input must be a string",
+      "string.empty": "input is required",
+      "any.required": "input is a required field",
+    }),
+  }),
+};
+
 module.exports = {
   register,
   login,
+  refresh,
 };

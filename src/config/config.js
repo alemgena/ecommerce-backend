@@ -13,6 +13,9 @@ const envVarsSchema = Joi.object()
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number()
       .default(30)
       .description("minutes after which access tokens expire"),
+    JWT_REFRESH_EXPIRATION_MINUTES: Joi.number()
+      .default(1800)
+      .description("minutes after which refresh tokens expire"),
     GOOGLE_USERINFO: Joi.string()
       .required()
       .description("google endpoint to get the user info"),
@@ -40,6 +43,7 @@ module.exports = {
   jwt: {
     secret: envVars.JWT_SECRET,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
+    refreshExpirationMinutes: envVars.JWT_REFRESH_EXPIRATION_MINUTES,
   },
 
   GOOGLE_USERINFO: envVars.GOOGLE_USERINFO,
