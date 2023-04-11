@@ -31,7 +31,6 @@ const Routers = {
   socials,
   upload,
   newsLetter,
-  shop,
   spam,
   favourite,
   faq,

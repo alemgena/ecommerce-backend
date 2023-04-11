@@ -2,7 +2,6 @@ const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
 const { subCategory } = require("../services");
 const SuccessResponse = require("../utils/successResponse");
-const { date } = require("joi");
 
 exports.add = catchAsync(async (req, res) => {
   const result = await subCategory.add({ ...req.body });
@@ -43,7 +42,6 @@ exports.get = catchAsync(async (req, res) => {
       httpStatus.OK,
       " ",
       result
-
     )
   );
 });

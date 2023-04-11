@@ -59,7 +59,8 @@ exports.delete = async (id) => {
       if (!data) {
         return reject(new ApiError(httpStatus.NOT_FOUND, "category not found"));
       }
-      await data.delete();
+      data.deletedAt = Date.now();
+      await data.save();
       resolve(data);
     });
   });
