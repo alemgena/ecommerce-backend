@@ -11,17 +11,19 @@ const favourite = require("./favourite");
 const faq = require("./faq");
 const notification = require("./notification");
 const advertisement = require("./houseAdvertisement");
-const adds = require("./adds");
 const feedBack = require("./feedBack");
 const productVariant = require("./variant");
+const shop=require("./shop")
 const productOption = require("./options");
 const optionValues = require("./optionValues");
-
-const addsView = require("./addsView");
+const chat = require("./chat");
+const review = require("./review");
+const region=require('./region')
 const Routers = {
   auth,
   product,
-  adds,
+  region,
+  chat,
   category,
   user,
   feedBack,
@@ -30,7 +32,6 @@ const Routers = {
   upload,
   newsLetter,
   spam,
-  addsView,
   favourite,
   faq,
   notification,
@@ -38,6 +39,7 @@ const Routers = {
   productVariant,
   productOption,
   optionValues,
+  review,
 };
 
 module.exports = Routers;

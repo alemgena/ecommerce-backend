@@ -7,7 +7,10 @@ const ObjectID = require("mongodb").ObjectId;
 const SuccessResponse = require("../utils/successResponse");
 const ApiError = require("../utils/ApiError");
 exports.add = catchAsync(async (req, res) => {
-  const body = { seller: req.user.id, ...req.body };
+  const body = {
+    seller: req.user.id,
+    ...req.body,
+  };
   const data = await product.add(body);
   res
     .status(httpStatus.CREATED)
@@ -87,15 +90,4 @@ exports.delete = catchAsync(async (req, res) => {
         data
       )
     );
-});
-exports.viewProductImage = catchAsync(async (req, res) => {
-  if (!ObjectID.isValid(req.params.id)) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Product Id is not valid");
-  }
-  const data = await product.viewProductImage(req.params.id);
-  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
-});
-exports.listImages = catchAsync(async (req, res) => {
-  const data = await product.viewImages();
-  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
 });

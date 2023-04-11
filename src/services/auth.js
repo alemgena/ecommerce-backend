@@ -53,7 +53,7 @@ exports.register = async (userBody) => {
             </div>`,
     };
     const sendInfo = await transporter.sendMail(mailOptions);
-    if (sendInfo.accepted.length > 0) {
+     if (sendInfo.accepted.length > 0) {
       Object.assign(userBody, userCode);
       User.create(userBody, (err, data) => {
         if (err) {
@@ -75,22 +75,25 @@ exports.register = async (userBody) => {
     }
   });
 };
-exports.loginUserWithEmailAndPassword = async (email, password) => {
-  return new Promise(async(resolve, reject) => {
-    User.findOne({ email },async (err, data) => {
-      if (err) {
-        return reject(
-          new ApiError(httpStatus.UNAUTHORIZED, "Unable to login",)
-        );
-      }
+exports.loginUserWithEmailAndPassword = async (input, password) => {
+  return new Promise(async (resolve, reject) => {
+    User.findOne(
+      { $or: [{ email: input }, { phone: input }] },
+      async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(httpStatus.UNAUTHORIZED, "Unable to login")
+          );
+        }
 
-      if ( !data || ! await data.isPasswordMatch(password)) {
-        return reject(
-          new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password")
-        );
+        if (!data || !(await data.isPasswordMatch(password))) {
+          return reject(
+            new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password")
+          );
+        }
+        resolve(data);
       }
-      resolve(data);
-    });
+    );
   });
 };
 exports.emailVerify = async (email, code) => {

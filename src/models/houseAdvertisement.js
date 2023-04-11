@@ -1,25 +1,40 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const { toJSON, paginate } = require("./plugins");
 
+const mongoose = require("mongoose");
+const { paginate, toJSON } = require("./plugins");
+const Double = require("@mongoosejs/double");
+const mongoose_delete = require("mongoose-delete");
 const houseAdvertisement = mongoose.Schema(
   {
-    productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-    duration: {
-      type: Date,
-      require:true
-    },
-    status: {
+    title: {
       type: String,
-      default: "ACTIVE",
-      enum: ["ACTIVE", "BLOCKED",]
+      required: true,
+      minlength: 3,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+      link: {
+        type: String,
+        required: true,
+      },
+    photo: {
+      type: String,
+   required: true,
     },
   },
   {
     timestamps: true,
   }
 );
-
+houseAdvertisement.index(
+    { title: "text", description: "text" },
+    { collation: { locale: "en", strength: 2 } }
+  );
 houseAdvertisement.plugin(toJSON);
 houseAdvertisement.plugin(paginate);
-module.exports = HouseAdvertisement = mongoose.model("HouseAdvertisement", houseAdvertisement);
+houseAdvertisement.plugin(mongoose_delete, { overrideMethods: true });
+const HouseAdvertisement = mongoose.model("HouseAdvertisement", houseAdvertisement)
+module.exports = HouseAdvertisement;

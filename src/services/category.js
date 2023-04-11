@@ -2,7 +2,6 @@ const httpStatus = require("http-status");
 const { Category, Subcategory } = require("../models");
 const ApiError = require("../utils/ApiError");
 exports.add = async (categoryBody) => {
-  
   if (await Category.isNameTaken(categoryBody.name)) {
     throw new ApiError(
       httpStatus.BAD_REQUEST,
@@ -12,7 +11,26 @@ exports.add = async (categoryBody) => {
   return Category.create(categoryBody);
 };
 exports.list = async () => {
-  return Category.find({}).populate('subcategory');
+  return new Promise((resolve, reject) => {
+    Category.find({}).populate("subcategory")
+      .exec(async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Error finding the  category",
+              err
+            )
+          );
+        }
+        if (!data) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, " categories not found")
+          );
+        }
+        resolve(data);
+      });
+  });
 };
 exports.update = async (id, updateBody) => {
   const category = await Category.findById(id);

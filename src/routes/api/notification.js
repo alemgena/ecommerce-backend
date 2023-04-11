@@ -13,6 +13,7 @@ router.post(
 );
 
 router.get("", notificationController.list);
+router.post("/sendNotification", notificationController.sendNotification);
 
 router.patch("/:id", auth(), notificationController.update);
 

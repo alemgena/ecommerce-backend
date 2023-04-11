@@ -28,8 +28,51 @@ exports.add = async (userID) => {
             )
           );
         }
-        resolve(data.populate("User"));
+        resolve(data.populate("userID"));
       });
+    });
+  });
+};
+
+exports.query = async (filter, options) => {
+  const newsLetters = await NewsLetter.paginate(filter, options);
+  return newsLetters;
+};
+exports.unsubscribe = async (id) => {
+  return new Promise((resolve, reject) => {
+    NewsLetter.findOne({ userID: id }, async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(httpStatus.BAD_REQUEST, "error unsubscribing", err)
+        );
+      }
+
+      if (!data) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "newsletter not found")
+        );
+      }
+      await data.delete();
+      resolve(data.populate("userID"));
+    });
+  });
+};
+exports.systemUnsubscribe = async (id) => {
+  return new Promise((resolve, reject) => {
+    NewsLetter.findOne({ _id: id }, async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(httpStatus.BAD_REQUEST, "error unsubscribing", err)
+        );
+      }
+
+      if (!data) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "newsletter not found")
+        );
+      }
+      await data.delete();
+      resolve(data.populate("userID"));
     });
   });
 };

@@ -3,7 +3,14 @@ const util = require("util");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/uploads/images/" + req.params.type);
+    let params;
+    if(req.params.type){
+      params=req.params.type
+    }
+    else{
+      params='user'
+    }
+    cb(null, "src/uploads/images/" + params);
   },
   filename: function (req, file, cb) {
     cb(

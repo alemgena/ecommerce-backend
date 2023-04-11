@@ -8,6 +8,16 @@ const add = {
       "string.min": "product name must be longer than 4 characters",
       "any.required": "product name is a required field",
     }),
+    location: Joi.string().required().messages({
+      "string.base": "location must be a string",
+      "string.empty": "location cannot be empty field",
+      "any.required": "location is a required field",
+    }),
+    region: Joi.string().required().messages({
+      "string.base": " region must be a string",
+      "string.empty": "region cannot be empty field",
+      "any.required": "region is a required field",
+    }),
     description: Joi.string().required().min(4).messages({
       "string.base": "description must be a string",
       "string.empty": "description cannot be an empty field",
@@ -24,7 +34,6 @@ const add = {
     //   "string.empty": "subCategory cannot be an empty field",
     //   "any.required": "subCategory is a required field",
     // }),
-
     price: Joi.number().required().messages({
       "string.base": "price must be a number",
       "string.empty": "price cannot be an empty field",
@@ -38,11 +47,18 @@ const add = {
           "any.required": "option are required",
         }),
         values: Joi.array().items(
-          Joi.string().required().messages({
+          Joi.string().messages({
             "string.base": "option values must be a string",
             "any.required": "option values are required",
           })
         ),
+        suboption: Joi.boolean().default(false).messages({
+          "string.base": "suboption value must be a boolean",
+        }),
+        value: Joi.string().messages({
+          "string.base": "value must be a string",
+          "string.empty": "value cannot be an empty field",
+        }),
       })
     ),
     // featured: Joi.boolean(),

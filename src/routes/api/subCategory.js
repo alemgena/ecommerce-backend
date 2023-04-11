@@ -27,6 +27,11 @@ router.get(
   "/:id", // auth(),
   subCategoryController.get
 );
+router.get(
+  "/byName/:name", 
+  subCategoryController.getByName
+);
+
 
 router.post(
   "/:id/options",

@@ -16,6 +16,14 @@ const userSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    phone: {
+      type: String,
+      require: true,
+    },
+    
+    device_token: {
+      type: String,
+    },
     profile_picture: {
       type: String,
       trim: true,
@@ -31,9 +39,9 @@ const userSchema = mongoose.Schema(
         trim: true,
       },
     ],
-    code:{
-      type:String
-      },
+    code: {
+      type: String,
+    },
     status: {
       type: String,
       default: "ACTIVE",
@@ -51,11 +59,10 @@ const userSchema = mongoose.Schema(
         }
       },
     },
-    imageURL: [
-      {
-        type: String,
-      },
-    ],
+    imageURL: {
+      type: String,
+    },
+
     password: {
       type: String,
       // required: true,

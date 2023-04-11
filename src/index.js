@@ -2,10 +2,17 @@ const mongoose = require("mongoose");
 const app = require("./app");
 const config = require("./config/config");
 const logger = require("./config/logger");
-
 const { newEnforcer } = require("casbin");
 const { MongooseAdapter } = require("casbin-mongoose-adapter");
 const path = require("path");
+let webhook = require('./webhook.js')
+let http = require('http').createServer(app)
+let io = require('socket.io')(http, {
+  cors: {
+    origin: '*',
+  }
+});
+webhook.start(io)
 
 let server;
 mongoose

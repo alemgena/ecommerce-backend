@@ -1,5 +1,4 @@
 const Joi = require("joi");
-
 const register = {
   body: Joi.object().keys({
     first_name: Joi.string().min(4).required().messages({
@@ -14,11 +13,24 @@ const register = {
       "string.min": "last name must be longer than 4 characters",
       "any.required": "last name is a required field",
     }),
+    phone: Joi.string().required().min(4).messages({
+      "string.base": "phone must be a string",
+      "string.empty": " phone cannot be an empty field",
+      "string.min": "phone must be longer than 4 characters",
+      "any.required": "phone is a required field",
+    }),
     email: Joi.string().email().required().messages({
       "string.base": "email must be a string",
       "string.email": "must enter a valid email",
       "string.empty": "email is required",
       "any.required": "email is a required field",
+    }),
+    //device_token
+    device_token: Joi.string().messages({
+      "string.base": "device_token must be a string",
+    }),
+    imageURL: Joi.string().messages({
+      "string.base": "imageURL must be a string",
     }),
     password: Joi.string().min(6).required().messages({
       "string.base": "password must be a string",
@@ -28,14 +40,12 @@ const register = {
     }),
   }),
 };
-
 const login = {
   body: Joi.object().keys({
-    email: Joi.string().email().required().messages({
-      "string.base": "email must be a string",
-      "string.email": "must enter a valid email",
-      "string.empty": "email is required",
-      "any.required": "email is a required field",
+    input: Joi.string().required().messages({
+      "string.base": "input must be a string",
+      "string.empty": "input is required",
+      "any.required": "input is a required field",
     }),
     password: Joi.string().min(6).required().messages({
       "string.base": "password must be a string",
@@ -45,8 +55,18 @@ const login = {
     }),
   }),
 };
+const refresh = {
+  body: Joi.object().keys({
+    token: Joi.string().required().messages({
+      "string.base": "input must be a string",
+      "string.empty": "input is required",
+      "any.required": "input is a required field",
+    }),
+  }),
+};
 
 module.exports = {
   register,
   login,
+  refresh,
 };

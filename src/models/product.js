@@ -24,6 +24,21 @@ const productSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    viewCount: {
+      type: Number,
+      required: false,
+      trim: true,
+    },
+    region:{
+    type: String,
+   // required: true,
+    },
+    location: {
+        type: String,
+        required: true,
+        default:''
+    },
+    
     subcategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subcategory",
@@ -44,6 +59,16 @@ const productSchema = mongoose.Schema(
             ref: "OptionValue",
             required: true,
             autopopulate: { maxDepth: 1 },
+          },
+        ],
+        value: {
+          type: String,
+          trim: true,
+        },
+        others: [
+          {
+            type: String,
+            trim: true,
           },
         ],
       },

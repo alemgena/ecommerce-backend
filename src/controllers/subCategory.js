@@ -45,3 +45,14 @@ exports.get = catchAsync(async (req, res) => {
     )
   );
 });
+exports.getByName = catchAsync(async (req, res) => {
+  const result = await subCategory.getByName(req.params.name);
+  res.send(
+    new SuccessResponse(
+      httpStatus.OK,
+      " ",
+      result
+
+    )
+  );
+});

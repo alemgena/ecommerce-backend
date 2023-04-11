@@ -21,4 +21,11 @@ router.post(
   optionValuesController.add
 );
 
+router.post(
+  "/:id/suboptions",
+  auth(),
+  // validate(optionValueValidation.add),
+  productOptionController.addSubOption
+);
+
 module.exports = router;

@@ -17,7 +17,8 @@ router.patch(
   userController.activateUserAccount
 );
 
-router.patch("/:id", auth(), userController.update);
-
+router.patch("", auth(), userController.update);
+router.get("/:id",auth(), userController.get)
+router.get("",auth(),userController.list)
 router.patch("/:id/suspendAccount", userController.suspendUserAccount);
 module.exports = router;
