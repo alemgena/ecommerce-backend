@@ -20,6 +20,10 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    
+    device_token: {
+      type: String,
+    },
     profile_picture: {
       type: String,
       trim: true,

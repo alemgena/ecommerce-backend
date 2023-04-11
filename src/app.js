@@ -61,6 +61,7 @@ app.use("/api/advertisement", routers.advertisement);
 app.use("/api/feedbacks", routers.feedBack);
 app.use("/api/variants", routers.productVariant);
 app.use("/api/shops", routers.shop);
+app.use("/api/regions", routers.region);
 app.use("/api/options", routers.productOption);
 app.use("/api/values", routers.optionValues);
 app.use("/api/chat", routers.chat);

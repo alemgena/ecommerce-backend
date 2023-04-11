@@ -34,17 +34,9 @@ const productSchema = mongoose.Schema(
    // required: true,
     },
     location: {
-      type: {
-        type: String, // Don't do `{ location: { type: String } }`
-        enum: ['Point'], // 'location.type' must be 'Point'
+        type: String,
         required: true,
-        default:"Point"
-      },
-      coordinates: {
-        type: [Number],
-       required: true,
-       default:[0,0]
-      }
+        default:''
     },
     
     subcategory: {

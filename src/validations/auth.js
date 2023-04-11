@@ -1,5 +1,4 @@
 const Joi = require("joi");
-
 const register = {
   body: Joi.object().keys({
     first_name: Joi.string().min(4).required().messages({
@@ -25,6 +24,10 @@ const register = {
       "string.email": "must enter a valid email",
       "string.empty": "email is required",
       "any.required": "email is a required field",
+    }),
+    //device_token
+    device_token: Joi.string().messages({
+      "string.base": "device_token must be a string",
     }),
     imageURL: Joi.string().messages({
       "string.base": "imageURL must be a string",

@@ -9,10 +9,6 @@ const ApiError = require("../utils/ApiError");
 exports.add = catchAsync(async (req, res) => {
   const body = {
     seller: req.user.id,
-    location: {
-      type: "Point",
-      coordinates: [req.body.longitude, req.body.latitude],
-    },
     ...req.body,
   };
   const data = await product.add(body);
