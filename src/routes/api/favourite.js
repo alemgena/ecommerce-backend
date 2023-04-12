@@ -11,5 +11,8 @@ router.post(
   validate(favouriteValidation.add),
   favouriteController.add
 );
-
+router.get(
+  "", auth(),
+  favouriteController.get
+);
 module.exports = router;

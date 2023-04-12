@@ -50,7 +50,7 @@ subCategorySchema.statics.isNameTaken = async function (
 subCategorySchema.virtual("product", {
   ref: "Product",
   localField: "_id",
-  foreignField: "subCategory",
+  foreignField: "subcategory",
   match: { state: "ACTIVE" },
 });
 

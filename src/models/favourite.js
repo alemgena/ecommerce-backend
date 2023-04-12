@@ -25,7 +25,13 @@ const favouritesSchema = mongoose.Schema(
         timestamps: true,
     }
 );
-
+favouritesSchema.statics.isProductAdd = async function (
+    body,
+    excludeSubCategoryId
+  ) {
+    const data = await this.findOne({ product: body.product, user: body.user, _id: { $ne: excludeSubCategoryId } });
+    return !!data;
+  };
 
 favouritesSchema.plugin(toJSON);
 favouritesSchema.plugin(paginate);

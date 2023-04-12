@@ -20,7 +20,7 @@ mongoose
   .then(async () => {
     logger.info("Connected to MongoDB");
     global.enforcer = await Casbin();
-    server = app.listen(config.port, () => {
+    server = http.listen(config.port, () => {
       logger.info(`Listening to port ${config.port}`);
     });
   });

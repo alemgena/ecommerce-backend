@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const { toJSON, paginate } = require("./plugins");
 const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
+const mongoose_delete = require("mongoose-delete");
 const categorySchema = mongoose.Schema(
   {
     name: {
@@ -20,6 +21,7 @@ const categorySchema = mongoose.Schema(
       required: false,
       trim: true,
     },
+    deletedAt: { type: Date, default: null },
   },
   {
     timestamps: true,
@@ -34,9 +36,8 @@ categorySchema.index(
 
 categorySchema.index(
   { name: 1 },
-  { unique: true, partialFilterExpression: { deletedAt: { $eq: null } } }
+  { unique: true, partialFilterExpression: { deleted: { $eq: false } } }
 );
-
 categorySchema.statics.isNameTaken = async function (
   name,
   excludecategoryId
@@ -55,4 +56,5 @@ categorySchema.set('toJSON', { virtuals: true });
 categorySchema.set('toObject', { virtuals: true });
 categorySchema.plugin(toJSON);
 categorySchema.plugin(paginate);
+categorySchema.plugin(mongoose_delete, { overrideMethods: true });
 module.exports = Category = mongoose.model("Category", categorySchema);
