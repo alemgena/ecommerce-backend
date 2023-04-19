@@ -8,6 +8,13 @@ const add = {
       "string.min": "title must be longer than 4 characters",
       "any.required": "title is a required field",
     }),
+    userId: Joi.string().min(4).required().messages({
+      "string.base": "userId must be a string",
+      "string.empty": "userId cannot be empty field",
+      "string.min": "userId must be longer than 4 characters",
+      "any.required": "userId is a required field",
+    }),
+    
     description: Joi.string().required().min(4).messages({
       "string.base": "description must be a string",
       "string.empty": "description cannot be an empty field",
