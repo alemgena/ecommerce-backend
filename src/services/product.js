@@ -67,9 +67,10 @@ exports.view = async (id) => {
   if (!product) {
     throw new ApiError(httpStatus.BAD_REQUEST, "product not found");
   }
-  var subCategory = product.subCategory;
+  
+  var subCategory = product.subcategory;
   const relatedProducts = await Product.find()
-    .where("subCategory")
+    .where("subcategory")
     .equals(subCategory);
 
   var response = { product, relatedProducts };
