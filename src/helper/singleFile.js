@@ -18,6 +18,7 @@ const storage = multer.diskStorage({
     );
   },
 });
+
 const multi_upload = multer({
   storage,
   // 1MB
