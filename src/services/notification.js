@@ -33,7 +33,29 @@ exports.delete= async (id) => {
     return myquery;
   };
 
-
+  exports.getUserNotification = async (id) => {
+    return new Promise((resolve, reject) => {
+      Notification
+        .find({userId:id})
+        .exec(async (err, data) => {
+          if (err) {
+            return reject(
+              new ApiError(
+                httpStatus.NOT_FOUND,
+                "Error finding the notification",
+                err
+              )
+            );
+          }
+          if (!data) {
+            return reject(
+              new ApiError(httpStatus.NOT_FOUND, "Notification  not found")
+            );
+          }
+          resolve(data);
+        });
+    });
+  };
 
 exports.get = async (id) => {
   return new Promise((resolve, reject) => {

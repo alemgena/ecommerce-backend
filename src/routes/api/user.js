@@ -20,5 +20,6 @@ router.patch(
 router.patch("", auth(), userController.update);
 router.get("/:id",auth(), userController.get)
 router.get("",auth(),userController.list)
+router.patch("/:id/updateDeviceToken",userController.updateDeviceToken)
 router.patch("/:id/suspendAccount", userController.suspendUserAccount);
 module.exports = router;
