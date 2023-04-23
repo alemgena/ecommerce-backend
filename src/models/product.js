@@ -79,9 +79,10 @@ const productSchema = mongoose.Schema(
       required: true,
       autopopulate:true
     },
+
     featured: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     premium: {
       type: Boolean,

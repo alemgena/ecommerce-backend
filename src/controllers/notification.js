@@ -17,7 +17,10 @@ exports.list = catchAsync(async (req, res) => {
   const data = await notification.list();
   res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
 });
-
+exports.userNotification = catchAsync(async (req, res) => {
+  const data = await notification.getUserNotification(req.user.id);
+  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
+});
 exports.update = catchAsync(async (req, res) => {
   const original = await notification.get(req.params.id);
   const updatedNotification = await notification.update(
