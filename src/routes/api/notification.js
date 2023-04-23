@@ -15,6 +15,7 @@ router.post(
 router.get("", notificationController.list);
 router.post("/sendNotification", notificationController.sendNotification);
 
+router.get("/userNotification",auth(), notificationController.userNotification);
 router.patch("/:id", auth(), notificationController.update);
 
 router.delete("/:id", auth(), notificationController.delete);
