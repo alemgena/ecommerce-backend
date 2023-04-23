@@ -79,6 +79,7 @@ const productSchema = mongoose.Schema(
       required: true,
       autopopulate:true
     },
+
     featured: {
       type: Boolean,
       default: true,
