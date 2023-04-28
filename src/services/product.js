@@ -122,17 +122,24 @@ exports.uploadProductImages = async (files, id) => {
   return await product.save();
 };
 exports.delete = async (id) => {
-  const product = await Product.findById(id);
-  if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, "product not found");
-  }
-  const state = {
-    state: "DELETED",
-  };
-  let keys = Object.keys(state);
-  keys.map((x) => {
-    product[x] = state[x];
+  return new Promise((resolve, reject) => {
+    Product.findById(id, async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(
+            httpStatus.NOT_FOUND,
+            "Unable to find the  product",
+            err
+          )
+        );
+      }
+      if (!data) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "Product not found")
+        );
+      }
+      await data.delete();
+      resolve(data);
+    });
   });
-  await product.save();
-  return product;
 };
