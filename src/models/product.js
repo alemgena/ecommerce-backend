@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { paginate, toJSON } = require("./plugins");
 const Double = require("@mongoosejs/double");
-
+const mongoose_delete = require("mongoose-delete");
 const productSchema = mongoose.Schema(
   {
     name: {
@@ -31,11 +31,11 @@ const productSchema = mongoose.Schema(
     },
     region:{
     type: String,
-   // required: true,
+    required: true,
     },
     location: {
         type: String,
-        required: true,
+      required: true,
         default:''
     },
     
@@ -105,7 +105,7 @@ productSchema.plugin(toJSON);
 productSchema.plugin(paginate);
 productSchema.set("toJSON", { virtuals: true });
 productSchema.set("toObject", { virtuals: true });
-
+productSchema.plugin(mongoose_delete, { overrideMethods: true });
 const Product = mongoose.model("Product", productSchema);
 Product.collection.createIndex({ name: "text" });
 
