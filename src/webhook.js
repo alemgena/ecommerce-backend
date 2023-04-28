@@ -11,7 +11,7 @@ module.exports = {
     socket.join(data);
   });
   socket.on("send_message", async(data) => {
-    socket.to(data.roomId).emit("receive_message", data);
+    socket.broadcast.emit("receive_message", data);
   });
   //chatImage
   socket.on("chatImage",async(data) => {
