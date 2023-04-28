@@ -2,17 +2,29 @@ const Joi = require("joi");
 const ObjectID = require("mongodb").ObjectId;
 const add = {
   body: Joi.object().keys({
-    message: Joi.string().required().messages({
+    message_data: Joi.string().required().messages({
       "string.empty": "message cannot be empty field",
     }),
     url: Joi.string().min(4).messages({
       "string.base": "url must be a string",
       "string.empty": "url cannot be empty field",
     }),
-    to: Joi.string().required().messages({
+    to: Joi.string().required().custom((value, helper) => {
+      if (!ObjectID.isValid(value)) {
+        return helper.message("user id is not valid");
+      } else {
+        return value;
+      }
+    }).messages({
       "string.empty": "to cannot be empty field",
     }),
-    product: Joi.string().required().messages({
+    product: Joi.string().required().custom((value, helper) => {
+      if (!ObjectID.isValid(value)) {
+        return helper.message("product id is not valid");
+      } else {
+        return value;
+      }
+    }).messages({
       "string.empty": "product cannot be empty field",
     }),
 

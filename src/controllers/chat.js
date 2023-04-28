@@ -5,14 +5,14 @@ const SuccessResponse = require("../utils/successResponse");
 
 exports.add = catchAsync(async (req, res) => {
   console.log("rrr",req.body)
-    const body = { from:'63e343195c535724894efa5b', ...req.body };
+    const body = { from:req.user.id, ...req.body };
   const result = await chat.add(body );
   res
     .status(httpStatus.CREATED)
     .send(new SuccessResponse(httpStatus.CREATED, "", result));
 });
 exports.get = catchAsync(async (req, res) => {
-  const result = await chat.get("63e343195c535724894efa5b");
+  const result = await chat.get(req.user.id);
   res.send(
     new SuccessResponse(
       httpStatus.OK,
@@ -41,8 +41,18 @@ exports.getByRoomId = catchAsync(async (req, res) => {
     )
   );
 });
+exports.listAll = catchAsync(async (req, res) => {
+  const result = await chat.listAll(req.user.id);
+  res.send(
+    new SuccessResponse(
+      httpStatus.OK,
+      " ",
+      result
+    )
+  );
+});
 exports.list = catchAsync(async (req, res) => {
-    const result = await chat.list(req.user.id);
+    const result = await chat.list(req.user.id,req.params.to);
     res.send(
       new SuccessResponse(
         httpStatus.OK,
