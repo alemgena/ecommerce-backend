@@ -15,4 +15,8 @@ router.get(
   "", auth(),
   favouriteController.get
 );
+router.delete(
+  "/:id", auth(),
+  favouriteController.delete
+);
 module.exports = router;

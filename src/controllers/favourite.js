@@ -14,3 +14,7 @@ exports.get = catchAsync(async (req, res) => {
   const data = await favourite.get(req.user.id);
   res.send(new SuccessResponse(httpStatus.OK, "", data));
 });
+exports.delete = catchAsync(async (req, res) => {
+  const data = await favourite.delete(req.params.id);
+  res.send(new SuccessResponse(httpStatus.OK, "Successfully removed the product from favorite", data));
+});
