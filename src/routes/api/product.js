@@ -23,6 +23,7 @@ router.patch(
 
 router.post("/uploadImages/:id", productController.uploadProductImages);
 
+router.post("/updateImages/:id", productController.updateProductImages);
 router.delete("/:id", auth(), productController.delete);
 
 router.post(

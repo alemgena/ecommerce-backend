@@ -75,6 +75,25 @@ exports.uploadProductImages = catchAsync(async (req, res) => {
       )
     );
 });
+exports.updateProductImages = catchAsync(async (req, res) => {
+  if (!ObjectID.isValid(req.params.id)) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product Id is not valid");
+  }
+  await uploadImage(req, res);
+  if (req.files.length === 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Pleas Select One File");
+  }
+  const data = await product.updateProductImages(req.params.id,req.files,);
+  res
+    .status(httpStatus.OK)
+    .send(
+      new SuccessResponse(
+        httpStatus.OK,
+        "Successfully  upload product images",
+        data
+      )
+    );
+});
 
 exports.delete = catchAsync(async (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
