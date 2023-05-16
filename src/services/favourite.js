@@ -1,7 +1,6 @@
 const httpStatus = require("http-status");
 const { Favourite } = require("../models");
 const ApiError = require("../utils/ApiError");
-
 exports.add = async (favouriteBody) => {
     return new Promise(async (resolve, reject) => {
         if (await Favourite.isProductAdd(favouriteBody)) {
@@ -27,7 +26,6 @@ exports.add = async (favouriteBody) => {
       });
 };
 exports.get = async (id) => {
-  console.log(id)
   return new Promise((resolve, reject) => {
     Favourite.find({user:id})
       .populate("product")
@@ -48,5 +46,27 @@ exports.get = async (id) => {
         }
         resolve(data);
       });
+  });
+};
+exports.delete = async (id) => {
+  return new Promise((resolve, reject) => {
+    Favourite.findById(id, async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(
+            httpStatus.NOT_FOUND,
+            "Unable to find the  favorite",
+            err
+          )
+        );
+      }
+      if (!data) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "favorite not found")
+        );
+      }
+      await data.delete();
+      resolve(data);
+    });
   });
 };

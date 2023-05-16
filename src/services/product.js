@@ -71,7 +71,7 @@ exports.view = async (id) => {
   if (!product) {
     throw new ApiError(httpStatus.BAD_REQUEST, "product not found");
   }
-  
+
   var subCategory = product.subcategory;
   const relatedProducts = await Product.find()
     .where("subcategory")
@@ -120,6 +120,33 @@ exports.uploadProductImages = async (files, id) => {
 
   product.imagesURL = images;
   return await product.save();
+};
+exports.updateProductImages = (productId, newImages) => {
+  return new Promise((resolve, reject) => {
+    const images = newImages?.map((type) => `images/${type.filename}`);
+    Product.findByIdAndUpdate(
+      productId,
+      { $push: { imagesURL: { $each: images, $position: 0 } } },
+      { new: true },
+      (err, updatedProduct) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Unable to update product image",
+              err
+            )
+          );
+        }
+        if (!updatedProduct) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, "Product  not found")
+          );
+        }
+        resolve(updatedProduct);
+      }
+    );
+  });
 };
 exports.delete = async (id) => {
   return new Promise((resolve, reject) => {
