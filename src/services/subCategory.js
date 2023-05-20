@@ -107,9 +107,7 @@ exports.get = async (id) => {
 };
 exports.getByName = async (name) => {
   return new Promise((resolve, reject) => {
-    Subcategory.findOne({ name: name }).collation(
-      { locale: 'en', strength: 2 }
-    )
+    Subcategory.find()
       .populate("product")
       .exec(async (err, data) => {
         if (err) {
@@ -126,7 +124,7 @@ exports.getByName = async (name) => {
             new ApiError(httpStatus.NOT_FOUND, "Sub category not found")
           );
         }
-        resolve(data);
+        resolve( data.filter(item => item.name.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase().startsWith(name.toLowerCase().slice(0, 2))));
       });
   });
 };
