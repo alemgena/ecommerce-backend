@@ -110,3 +110,14 @@ exports.delete = catchAsync(async (req, res) => {
       )
     );
 });
+exports.getByName = catchAsync(async (req, res) => {
+  const result = await product.getByName(req.params.name);
+  res.send(
+    new SuccessResponse(
+      httpStatus.OK,
+      " ",
+      result
+
+    )
+  );
+});

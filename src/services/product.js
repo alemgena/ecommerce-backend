@@ -153,9 +153,26 @@ exports.delete = async (id) => {
     Product.findById(id, async (err, data) => {
       if (err) {
         return reject(
+          new ApiError(httpStatus.NOT_FOUND, "Unable to find the  product", err)
+        );
+      }
+      if (!data) {
+        return reject(new ApiError(httpStatus.NOT_FOUND, "Product not found"));
+      }
+      await data.delete();
+      resolve(data);
+    });
+  });
+};
+exports.getByName = async (name) => {
+  return new Promise((resolve, reject) => {
+    Product.find()
+    .exec(async (err, data) => {
+      if (err) {
+        return reject(
           new ApiError(
             httpStatus.NOT_FOUND,
-            "Unable to find the  product",
+            "Error finding the product",
             err
           )
         );
@@ -165,8 +182,11 @@ exports.delete = async (id) => {
           new ApiError(httpStatus.NOT_FOUND, "Product not found")
         );
       }
-      await data.delete();
-      resolve(data);
+      resolve(
+        data.filter((item) =>
+          item.name.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase().startsWith(name.toLowerCase().slice(0, 2))
+        )
+      );
     });
   });
 };
