@@ -17,10 +17,10 @@ exports.add = catchAsync(async (req, res) => {
     .send(new SuccessResponse(httpStatus.CREATED, "", data));
 });
 
-// exports.list = catchAsync(async (req, res) => {
-//   const data = await product.list();
-//   res.status(200).send({ data });
-// });
+exports.list = catchAsync(async (req, res) => {
+  const data = await product.list();
+  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
+});
 
 exports.view = catchAsync(async (req, res) => {
   const data = await product.view(req.params.id);
