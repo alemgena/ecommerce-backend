@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post("", auth(), validate(productValidation.add), productController.add);
 
-// router.get("", productController.list);
+ router.get("/list", productController.list);
 router.get("/:id", productController.view);
 router.get("", productController.queryProducts);
 router.patch(
