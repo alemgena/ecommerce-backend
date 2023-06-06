@@ -45,6 +45,7 @@ exports.refreshToken=catchAsync(async(req,res)=>{
     config.jwt.accessExpirationMinutes,
     "minutes"
   ); 
+  
  auth.verifyRefreshToken(req.body.refreshToken)
   .then(({ tokenDetails }) => {
     console.log(tokenDetails)
