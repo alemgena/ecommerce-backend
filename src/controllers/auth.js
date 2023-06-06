@@ -2,6 +2,10 @@ const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
 const { auth, token } = require("../services");
 const SuccessResponse = require("../utils/successResponse");
+const moment = require("moment");
+const config = require("../config/config");
+const ApiError = require("../utils/ApiError");
+const jwt = require("jsonwebtoken");
 
 exports.register = catchAsync(async (req, res) => {
   const user = await auth.register({ ...req.body });
@@ -10,7 +14,6 @@ exports.register = catchAsync(async (req, res) => {
     .status(httpStatus.CREATED)
     .send(new SuccessResponse(httpStatus.CREATED, "", { user, tokens }));
 });
-
 exports.login = catchAsync(async (req, res) => {
   const { input, password } = req.body;
   const user = await auth.loginUserWithEmailAndPassword(input, password);
@@ -37,3 +40,32 @@ exports.userForgetPassword = catchAsync(async (req, res) => {
     .status(httpStatus.OK)
     .send(new SuccessResponse(httpStatus.OK, "", result));
 });
+exports.refreshToken=catchAsync(async(req,res)=>{
+  const accessTokenExpires = moment().add(
+    config.jwt.accessExpirationMinutes,
+    "minutes"
+  ); 
+ auth.verifyRefreshToken(req.body.refreshToken)
+  .then(({ tokenDetails }) => {
+    console.log(tokenDetails)
+      const payload = {
+        sub: tokenDetails.sub,
+        iat: moment().unix(),
+        exp: accessTokenExpires.unix(),
+        
+      };
+      const accessToken = jwt.sign(
+          payload, config.jwt.secret
+      );
+      res
+      .status(httpStatus.OK)
+      .send(new SuccessResponse(httpStatus.OK, "Access token created successfully",accessToken));
+  })
+  .catch(function (error) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "error refresh token",
+      error
+    );
+  });
+})

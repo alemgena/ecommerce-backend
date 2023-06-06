@@ -34,6 +34,11 @@ const add = {
       "string.empty": "price cannot be an empty field",
       "any.required": "price is a required field",
     }),
+    imagesURL: Joi.array().items(Joi.string().required()).messages({
+      "string.base": "imageURL must an array fo strings",
+      "string.empty": "imageURL cannot be an empty field",
+      "any.required": "imageURL is a required field",
+    }),
     options: Joi.array().items(
       Joi.object().keys({
         id: Joi.string().required().messages({
@@ -70,6 +75,10 @@ const update = {
       "string.base": "location must be a string",
       "string.empty": "location cannot be empty field",
    
+    }),
+    imagesURL: Joi.array().items(Joi.string()).messages({
+      "string.base": "imageURL must an array fo strings",
+    
     }),
     region: Joi.string().messages({
       "string.base": " region must be a string",
