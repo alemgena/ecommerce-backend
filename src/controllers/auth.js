@@ -45,7 +45,7 @@ exports.refreshToken=catchAsync(async(req,res)=>{
     config.jwt.accessExpirationMinutes,
     "minutes"
   ); 
-  
+
  auth.verifyRefreshToken(req.body.refreshToken)
   .then(({ tokenDetails }) => {
     console.log(tokenDetails)
@@ -60,7 +60,7 @@ exports.refreshToken=catchAsync(async(req,res)=>{
       );
       res
       .status(httpStatus.OK)
-      .send(new SuccessResponse(httpStatus.OK, "Access token created successfully",accessToken));
+      .send(new SuccessResponse(httpStatus.OK, "token refresh successfully",accessToken));
   })
   .catch(function (error) {
     throw new ApiError(
