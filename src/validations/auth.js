@@ -55,18 +55,17 @@ const login = {
     }),
   }),
 };
-const refresh = {
+const refreshToken={
   body: Joi.object().keys({
-    token: Joi.string().required().messages({
-      "string.base": "input must be a string",
-      "string.empty": "input is required",
-      "any.required": "input is a required field",
+    refreshToken: Joi.string().required().messages({
+      "string.base": "refreshToken must be a string",
+      "string.empty": "refreshToken is required",
+      "any.required": "refreshToken is a required field",
     }),
   }),
-};
-
+}
 module.exports = {
   register,
   login,
-  refresh,
+  refreshToken
 };

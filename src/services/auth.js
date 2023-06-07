@@ -2,6 +2,9 @@ const httpStatus = require("http-status");
 const nodemailer = require("nodemailer");
 const { User } = require("../models");
 const ApiError = require("../utils/ApiError");
+const jwt = require("jsonwebtoken");
+const moment = require("moment");
+const config = require("../config/config");
 const generator = require("generate-password");
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -147,4 +150,17 @@ exports.forgetPassword = async (email) => {
       "Could not send the activation code, Try again!"
     );
   }
+};
+exports.verifyRefreshToken = async(refreshToken) => {
+  return new Promise((resolve, reject) => {
+          jwt.verify(refreshToken, config.jwt.secret, async(err, tokenDetails) => {
+              if (err)
+                  return reject({ error: true, message: "Invalid refresh token" });
+              resolve({
+                  tokenDetails,
+                  error: false,
+                  message: "Valid refresh token",
+              });
+          });
+      });
 };
