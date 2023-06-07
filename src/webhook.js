@@ -11,14 +11,14 @@ module.exports = {
     socket.join(data);
   });
   socket.on("send_message", async(data) => {
-    socket.to(data.room).emit("receive_message", data);
+    socket.broadcast.emit("receive_message", data);
   });
   //chatImage
   socket.on("chatImage",async(data) => {
     socket.to(data.room).emit("chatImage", data);
   });
+
   socket.on("disconnect", () => {
-  
   });
     });
   },

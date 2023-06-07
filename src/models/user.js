@@ -19,6 +19,12 @@ const userSchema = mongoose.Schema(
     phone: {
       type: String,
       require: true,
+      default:null
+    },
+    
+    device_token: {
+      type: String,
+      default:null
     },
     profile_picture: {
       type: String,

@@ -14,34 +14,38 @@ exports.add = async (productData) => {
   if (!subcategory) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Subcategory not found");
   }
+  if (productData?.options && productData.options.length > 0) {
+    // Check if the options exist
+    const optionIds = productData.options
+      .filter((option) => option.suboption === false)
+      .map((option) => option.id);
 
-  // Check if the options exist
-  const optionIds = productData.options
-    .filter((option) => option.suboption === false)
-    .map((option) => option.id);
-
-  const options = await ProductOption.find({
-    _id: { $in: optionIds },
-    subcategory: productData.subcategory,
-  });
-
-  if (options.length !== optionIds.length) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "One or more options not found");
-  }
-
-  // Check if the option values exist
-  // poValuesID = productData.options.map((option) => option.values);
-  for (const option of productData.options) {
-    const optionValues = await OptionValue.find({
-      _id: { $in: option.values },
-      option: option.id,
+    const options = await ProductOption.find({
+      _id: { $in: optionIds },
+      subcategory: productData.subcategory,
     });
-    if (option.values?.length) {
-      if (optionValues.length !== option.values.length) {
-        throw new ApiError(
-          httpStatus.BAD_REQUEST,
-          "One or more options values not found"
-        );
+
+    if (options.length !== optionIds.length) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "One or more options not found"
+      );
+    }
+
+    // Check if the option values exist
+    // poValuesID = productData.options.map((option) => option.values);
+    for (const option of productData.options) {
+      const optionValues = await OptionValue.find({
+        _id: { $in: option.values },
+        option: option.id,
+      });
+      if (option.values?.length) {
+        if (optionValues.length !== option.values.length) {
+          throw new ApiError(
+            httpStatus.BAD_REQUEST,
+            "One or more options values not found"
+          );
+        }
       }
     }
   }
@@ -67,9 +71,10 @@ exports.view = async (id) => {
   if (!product) {
     throw new ApiError(httpStatus.BAD_REQUEST, "product not found");
   }
-  var subCategory = product.subCategory;
+
+  var subCategory = product.subcategory;
   const relatedProducts = await Product.find()
-    .where("subCategory")
+    .where("subcategory")
     .equals(subCategory);
 
   var response = { product, relatedProducts };
@@ -116,18 +121,72 @@ exports.uploadProductImages = async (files, id) => {
   product.imagesURL = images;
   return await product.save();
 };
-exports.delete = async (id) => {
-  const product = await Product.findById(id);
-  if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, "product not found");
-  }
-  const state = {
-    state: "DELETED",
-  };
-  let keys = Object.keys(state);
-  keys.map((x) => {
-    product[x] = state[x];
+exports.updateProductImages = (productId, newImages) => {
+  return new Promise((resolve, reject) => {
+    const images = newImages?.map((type) => `images/${type.filename}`);
+    Product.findByIdAndUpdate(
+      productId,
+      { $push: { imagesURL: { $each: images, $position: 0 } } },
+      { new: true },
+      (err, updatedProduct) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Unable to update product image",
+              err
+            )
+          );
+        }
+        if (!updatedProduct) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, "Product  not found")
+          );
+        }
+        resolve(updatedProduct);
+      }
+    );
   });
-  await product.save();
-  return product;
+};
+exports.delete = async (id) => {
+  return new Promise((resolve, reject) => {
+    Product.findById(id, async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "Unable to find the  product", err)
+        );
+      }
+      if (!data) {
+        return reject(new ApiError(httpStatus.NOT_FOUND, "Product not found"));
+      }
+      await data.delete();
+      resolve(data);
+    });
+  });
+};
+exports.getByName = async (name) => {
+  return new Promise((resolve, reject) => {
+    Product.find()
+    .exec(async (err, data) => {
+      if (err) {
+        return reject(
+          new ApiError(
+            httpStatus.NOT_FOUND,
+            "Error finding the product",
+            err
+          )
+        );
+      }
+      if (!data) {
+        return reject(
+          new ApiError(httpStatus.NOT_FOUND, "Product not found")
+        );
+      }
+      resolve(
+        data.filter((item) =>
+          item.name.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase().startsWith(name.toLowerCase().slice(0, 2))
+        )
+      );
+    });
+  });
 };

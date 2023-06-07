@@ -9,10 +9,6 @@ const ApiError = require("../utils/ApiError");
 exports.add = catchAsync(async (req, res) => {
   const body = {
     seller: req.user.id,
-    location: {
-      type: "Point",
-      coordinates: [req.body.longitude, req.body.latitude],
-    },
     ...req.body,
   };
   const data = await product.add(body);
@@ -21,10 +17,10 @@ exports.add = catchAsync(async (req, res) => {
     .send(new SuccessResponse(httpStatus.CREATED, "", data));
 });
 
-// exports.list = catchAsync(async (req, res) => {
-//   const data = await product.list();
-//   res.status(200).send({ data });
-// });
+exports.list = catchAsync(async (req, res) => {
+  const data = await product.list();
+  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
+});
 
 exports.view = catchAsync(async (req, res) => {
   const data = await product.view(req.params.id);
@@ -79,6 +75,25 @@ exports.uploadProductImages = catchAsync(async (req, res) => {
       )
     );
 });
+exports.updateProductImages = catchAsync(async (req, res) => {
+  if (!ObjectID.isValid(req.params.id)) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product Id is not valid");
+  }
+  await uploadImage(req, res);
+  if (req.files.length === 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Pleas Select One File");
+  }
+  const data = await product.updateProductImages(req.params.id,req.files,);
+  res
+    .status(httpStatus.OK)
+    .send(
+      new SuccessResponse(
+        httpStatus.OK,
+        "Successfully  upload product images",
+        data
+      )
+    );
+});
 
 exports.delete = catchAsync(async (req, res) => {
   if (!ObjectID.isValid(req.params.id)) {
@@ -94,4 +109,15 @@ exports.delete = catchAsync(async (req, res) => {
         data
       )
     );
+});
+exports.getByName = catchAsync(async (req, res) => {
+  const result = await product.getByName(req.params.name);
+  res.send(
+    new SuccessResponse(
+      httpStatus.OK,
+      " ",
+      result
+
+    )
+  );
 });

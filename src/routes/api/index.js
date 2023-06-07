@@ -18,13 +18,16 @@ const productOption = require("./options");
 const optionValues = require("./optionValues");
 const chat = require("./chat");
 const review = require("./review");
+const region=require('./region')
+const document=require('./document')
 const Routers = {
   auth,
   product,
-  
+  region,
   chat,
   category,
   user,
+  document,
   feedBack,
   subCategory,
   socials,

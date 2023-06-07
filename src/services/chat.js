@@ -38,9 +38,9 @@ exports.get = async (id) => {
         });
       });
   };
-  exports.list = async (id) => {
+  exports.getByProduct = async (id) => {
     return new Promise((resolve, reject) => {
-        Chat.find({from:id}, async (err, data) => {
+        Chat.findOne({product:id}, async (err, data) => {
           if (err) {
             return reject(
               new ApiError(httpStatus.NOT_FOUND, "Unable to find the chat", err)
@@ -51,5 +51,57 @@ exports.get = async (id) => {
           }
           resolve(data);
         });
+      });
+  };
+  exports.getByRoomId = async (id) => {
+    return new Promise((resolve, reject) => {
+        Chat.findOne({roomId:id}, async (err, data) => {
+          if (err) {
+            return reject(
+              new ApiError(httpStatus.NOT_FOUND, "Unable to find the chat", err)
+            );
+          }
+          if (!data) {
+            return reject(new ApiError(httpStatus.NOT_FOUND, "chat not found"));
+          }
+          resolve(data);
+        });
+      });
+  };
+  exports.listAll = async (id) => {
+    return new Promise((resolve, reject) => {
+      console.log(id)
+        Chat.find( { $or: [{ from: id }, { to: id }] }, async (err, data) => {
+          if (err) {
+            return reject(
+              new ApiError(httpStatus.NOT_FOUND, "Unable to find the chat", err)
+            );
+          }
+          if (!data) {
+            return reject(new ApiError(httpStatus.NOT_FOUND, "chat not found"));
+          }
+          resolve(data);
+        });
+      });
+  };
+  exports.list = async (from,to) => {
+    return new Promise((resolve, reject) => {
+        Chat.find({
+          $or: [
+            { from: from, to: to },
+            { from: to, to: from }
+          ]
+        }, async (err, data) => {
+          if (err) {
+            return reject(
+              new ApiError(httpStatus.NOT_FOUND, "Unable to find the chat", err)
+            );
+          }
+          if (!data) {
+            return reject(new ApiError(httpStatus.NOT_FOUND, "chat not found"));
+          }
+          resolve(data);
+        });
+        
       });
   };

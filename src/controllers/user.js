@@ -54,12 +54,14 @@ exports.update = catchAsync(async (req, res) => {
     })
   );
 });
-
 exports.get = catchAsync(async (req, res) => {
   const data = await user.get(req.params.id);
   res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
 });
-
+exports.updateDeviceToken = catchAsync(async (req, res) => {
+  const data = await user.updateDeviceToken(req.params.id,req.body.device_token);
+  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
+});
 exports.list = catchAsync(async (req, res) => {
   const data = await user.list();
   res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));

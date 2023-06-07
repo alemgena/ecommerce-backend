@@ -66,6 +66,30 @@ exports.get = async (id) => {
       });
   });
 };
+exports.updateDeviceToken = async (id, device_token) => {
+  return new Promise((resolve, reject) => {
+    User.findById(id)
+      .exec(async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Error finding the user",
+              err
+            )
+          );
+        }
+        if (!data) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, "User not found")
+          );
+        }
+        data. device_token= device_token
+        await data.save()
+        resolve(data);
+      });
+  });
+};
 exports.list = async (id) => {
   return new Promise((resolve, reject) => {
     User.find({})

@@ -10,12 +10,26 @@ const notificationSchema = mongoose.Schema(
       minlength: 3,
       trim: true,
     },
+    userId:{
+      type: String,
+      required: true,
+      minlength: 3,
+    },
     description: {
       type: String,
       required: true,
       trim: true,
     },
+    body: {
+      type: String,
+      trim: true,
+    },
     status: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    type: {
       type: String,
       required: true,
       trim: true,

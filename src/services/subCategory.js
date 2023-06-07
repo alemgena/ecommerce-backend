@@ -105,3 +105,26 @@ exports.get = async (id) => {
       });
   });
 };
+exports.getByName = async (name) => {
+  return new Promise((resolve, reject) => {
+    Subcategory.find()
+      .populate("product")
+      .exec(async (err, data) => {
+        if (err) {
+          return reject(
+            new ApiError(
+              httpStatus.NOT_FOUND,
+              "Error finding the sub category",
+              err
+            )
+          );
+        }
+        if (!data) {
+          return reject(
+            new ApiError(httpStatus.NOT_FOUND, "Sub category not found")
+          );
+        }
+        resolve( data.filter(item => item.name.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase().startsWith(name.toLowerCase().slice(0, 2))));
+      });
+  });
+};

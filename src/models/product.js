@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { paginate, toJSON } = require("./plugins");
 const Double = require("@mongoosejs/double");
-
+const mongoose_delete = require("mongoose-delete");
 const productSchema = mongoose.Schema(
   {
     name: {
@@ -31,20 +31,12 @@ const productSchema = mongoose.Schema(
     },
     region:{
     type: String,
-   // required: true,
+    required: true,
     },
     location: {
-      type: {
-        type: String, // Don't do `{ location: { type: String } }`
-        enum: ['Point'], // 'location.type' must be 'Point'
-        required: true,
-        default:"Point"
-      },
-      coordinates: {
-        type: [Number],
-       required: true,
-       default:[0,0]
-      }
+        type: String,
+      required: true,
+        default:''
     },
     
     subcategory: {
@@ -87,9 +79,10 @@ const productSchema = mongoose.Schema(
       required: true,
       autopopulate:true
     },
+
     featured: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     premium: {
       type: Boolean,
@@ -112,7 +105,7 @@ productSchema.plugin(toJSON);
 productSchema.plugin(paginate);
 productSchema.set("toJSON", { virtuals: true });
 productSchema.set("toObject", { virtuals: true });
-
+productSchema.plugin(mongoose_delete, { overrideMethods: true });
 const Product = mongoose.model("Product", productSchema);
 Product.collection.createIndex({ name: "text" });
 

@@ -8,6 +8,13 @@ const add = {
       "string.min": "title must be longer than 4 characters",
       "any.required": "title is a required field",
     }),
+    userId: Joi.string().min(4).required().messages({
+      "string.base": "userId must be a string",
+      "string.empty": "userId cannot be empty field",
+      "string.min": "userId must be longer than 4 characters",
+      "any.required": "userId is a required field",
+    }),
+    
     description: Joi.string().required().min(4).messages({
       "string.base": "description must be a string",
       "string.empty": "description cannot be an empty field",
@@ -18,8 +25,15 @@ const add = {
       "string.base": "status must be a string",
       "any.required": "status is a required field",
     }),
+    type: Joi.string().required().messages({
+      "string.base": "type must be a string",
+      "any.required": "type is a required field",
+    }),
     image: Joi.string().messages({
       "string.base": "image must be a string",
+    }),
+    body: Joi.string().messages({
+      "string.base": "body must be a string",
     }),
   }),
 };

@@ -7,7 +7,7 @@ let month = date_ob.getMonth() + 1;
 let year = date_ob.getFullYear();
 let fullDate = year + "-" + month + "-" + date;
 const chatSchema = new mongoose.Schema({
-  message: {
+  message_data: {
     type: String,
   },
   url: {
@@ -30,7 +30,12 @@ const chatSchema = new mongoose.Schema({
     required: true,
     autopopulate:true
   },
-  createdAt: { type: Date, default: new Date(fullDate) },
+  roomId: {
+    type: Number,
+  },
+
+},{
+  timestamps: true,
 });
 chatSchema.plugin(toJSON);
 chatSchema.plugin(paginate);
