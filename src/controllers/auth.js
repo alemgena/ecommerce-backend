@@ -22,7 +22,12 @@ exports.login = catchAsync(async (req, res) => {
     .status(httpStatus.OK)
     .send(new SuccessResponse(httpStatus.OK, "", { user, tokens }));
 });
-
+exports.refresh = catchAsync(async (req, res) => {
+  const tokens = await token.refresh(req.body.token);
+  res
+    .status(httpStatus.OK)
+    .send(new SuccessResponse(httpStatus.OK, "", tokens));
+});
 exports.emailVerification = catchAsync(async (req, res) => {
   const { email, code } = req.body;
   const user = await auth.emailVerify(email, code);

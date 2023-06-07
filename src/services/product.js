@@ -14,34 +14,38 @@ exports.add = async (productData) => {
   if (!subcategory) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Subcategory not found");
   }
+  if (productData?.options && productData.options.length > 0) {
+    // Check if the options exist
+    const optionIds = productData.options
+      .filter((option) => option.suboption === false)
+      .map((option) => option.id);
 
-  // Check if the options exist
-  const optionIds = productData.options
-    .filter((option) => option.suboption === false)
-    .map((option) => option.id);
-
-  const options = await ProductOption.find({
-    _id: { $in: optionIds },
-    subcategory: productData.subcategory,
-  });
-
-  if (options.length !== optionIds.length) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "One or more options not found");
-  }
-
-  // Check if the option values exist
-  // poValuesID = productData.options.map((option) => option.values);
-  for (const option of productData.options) {
-    const optionValues = await OptionValue.find({
-      _id: { $in: option.values },
-      option: option.id,
+    const options = await ProductOption.find({
+      _id: { $in: optionIds },
+      subcategory: productData.subcategory,
     });
-    if (option.values?.length) {
-      if (optionValues.length !== option.values.length) {
-        throw new ApiError(
-          httpStatus.BAD_REQUEST,
-          "One or more options values not found"
-        );
+
+    if (options.length !== optionIds.length) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "One or more options not found"
+      );
+    }
+
+    // Check if the option values exist
+    // poValuesID = productData.options.map((option) => option.values);
+    for (const option of productData.options) {
+      const optionValues = await OptionValue.find({
+        _id: { $in: option.values },
+        option: option.id,
+      });
+      if (option.values?.length) {
+        if (optionValues.length !== option.values.length) {
+          throw new ApiError(
+            httpStatus.BAD_REQUEST,
+            "One or more options values not found"
+          );
+        }
       }
     }
   }
