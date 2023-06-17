@@ -55,19 +55,15 @@ exports.add = async (productData) => {
     subcategory: subcategory._id,
     options: productData.options,
   });
-
   // Save the new product to the database
   await newProduct.save();
   return newProduct.populate();
 };
-
 exports.list = async () => {
-  return Product.find().sort({ createdAt: 1 });
+  return Product.find().sort({ createdAt: -1 });
 };
-
 exports.view = async (id) => {
   const product = await Product.findOne({ _id: id });
-
   if (!product) {
     throw new ApiError(httpStatus.BAD_REQUEST, "product not found");
   }
