@@ -62,7 +62,7 @@ exports.add = async (productData) => {
 };
 
 exports.list = async () => {
-  return Product.find({});
+  return Product.find().sort({ createdAt: 1 });
 };
 
 exports.view = async (id) => {
