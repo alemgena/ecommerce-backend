@@ -1,5 +1,5 @@
 const Joi = require("joi");
-
+const ObjectID = require("mongodb").ObjectId;
 const add = {
   body: Joi.object().keys({
     productId: Joi.string().required().messages({
@@ -35,7 +35,27 @@ const update = {
   }),
 };
 
+const avarage = {
+  params: Joi.object().keys({
+    id: Joi.string()
+      .min(4)
+      .required()
+      .custom((value, helper) => {
+        if (!ObjectID.isValid(value)) {
+          return helper.message("product id is not valid");
+        } else {
+          return value;
+        }
+      })
+      .messages({
+        "string.base": "product id must be a string",
+        "string.empty": "product id cannot be empty field",
+        "any.required": "product id is a required field",
+      }),
+  }),
+};
 module.exports = {
   add,
+  avarage,
   update,
 };

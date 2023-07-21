@@ -5,14 +5,12 @@ const axios = require("axios");
 const config = require("../config/config");
 const SuccessResponse = require("../utils/successResponse");
 const ApiError = require("../utils/ApiError");
-
 exports.add = catchAsync(async (req, res) => {
   const data = await notification.add(req.body);
   res
     .status(httpStatus.CREATED)
     .send(new SuccessResponse(httpStatus.CREATED, "", data));
 });
-
 exports.list = catchAsync(async (req, res) => {
   const data = await notification.list();
   res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));

@@ -34,6 +34,11 @@ exports.get = catchAsync(async (req, res) => {
 
   res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
 });
+exports.getAvarge = catchAsync(async (req, res) => {
+  const data = await review.getAvarge(req.params.id);
+
+  res.status(httpStatus.OK).send(new SuccessResponse(httpStatus.OK, "", data));
+});
 
 exports.list = catchAsync(async (req, res) => {
   const filter = pick(req.query, ["filters", "search"]);

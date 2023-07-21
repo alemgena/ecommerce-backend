@@ -64,7 +64,17 @@ const refreshToken={
     }),
   }),
 }
+const forgetPassword={
+  body: Joi.object().keys({
+    input: Joi.string().required().messages({
+      "string.base": "input must be a string",
+      "string.empty": "input is required",
+      "any.required": "input is a required field",
+    }),
+  }),
+}
 module.exports = {
+  forgetPassword,
   register,
   login,
   refreshToken

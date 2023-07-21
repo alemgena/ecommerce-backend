@@ -12,6 +12,7 @@ router.patch(
   reviewController.update
 );
 router.get("/:id", reviewController.get);
+router.get("/average/:id",  validate(reviewValidation.avarage),reviewController.getAvarge);
 router.get("", reviewController.list);
 router.delete("/:id", auth(), reviewController.delete);
 module.exports = router;
