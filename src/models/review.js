@@ -11,6 +11,7 @@ const reviewSchema = new mongoose.Schema({
   buyer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    autopopulate:true,
     required: true,
   },
   productId: {
@@ -35,7 +36,7 @@ reviewSchema.index(
   { unique: true, partialFilterExpression: { deleted: { $eq: false } } }
 );
 reviewSchema.plugin(mongoose_delete, { overrideMethods: true });
-
+reviewSchema.plugin(require(`mongoose-autopopulate`));
 reviewSchema.plugin(toJSON);
 reviewSchema.plugin(paginate);
 

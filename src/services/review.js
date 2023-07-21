@@ -1,6 +1,7 @@
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const { Review, Chat, Product } = require("../models");
+const { default: mongoose } = require("mongoose");
 
 exports.add = async (body) => {
   return new Promise(async (resolve, reject) => {
@@ -10,20 +11,20 @@ exports.add = async (body) => {
       return reject(new ApiError(httpStatus.NOT_FOUND, "Product not found"));
     }
 
-    const chat = await Chat.findOne({
-      from: buyerId,
-      to: product.seller._id,
-      product: productId,
-    });
+    // const chat = await Chat.findOne({
+    //   from: buyerId,
+    //   to: product.seller._id,
+    //   product: productId,
+    // });
 
-    if (!chat) {
-      return reject(
-        new ApiError(
-          httpStatus.NOT_FOUND,
-          "No chat found between buyer and seller for the specified product"
-        )
-      );
-    }
+    // if (!chat) {
+    //   return reject(
+    //     new ApiError(
+    //       httpStatus.NOT_FOUND,
+    //       "No chat found between buyer and seller for the specified product"
+    //     )
+    //   );
+    // }
     // Check if the user has already given a review for the specified product
     const existingReview = await Review.findOne({
       buyer: buyerId,
@@ -64,17 +65,15 @@ exports.update = async (id, updateBody) => {
       if (!data) {
         return reject(new ApiError(httpStatus.NOT_FOUND, "Data not found"));
       }
-
       Object.assign(data, updateBody);
       await data.save();
       resolve(data);
     });
   });
 };
-
 exports.view = async (id) => {
   return new Promise((resolve, reject) => {
-    Review.findOne({ id }, async (err, data) => {
+    Review.findById(id, async (err, data) => {
       if (err) {
         return reject(
           new ApiError(httpStatus.NOT_FOUND, "Error finding the data", err)
@@ -108,4 +107,25 @@ exports.delete = async (id) => {
       resolve(data);
     });
   });
+};
+//getAvarge
+exports.getAvarge = async (productId) => {
+  return new Promise(async(resolve, reject) => {
+    const product = await Review.findOne({ productId:productId });
+    if (!product) {
+      return reject(new ApiError(httpStatus.NOT_FOUND, "Product not found"));
+    }
+    Review.aggregate([
+      { $unwind: "$rating" },
+      { $match: { productId:mongoose.Types.ObjectId(productId)} },
+      { $group: { _id: null, averageRating: { $avg: '$rating' } } }
+    ])
+      .exec((error, averageRating) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(averageRating[0]?.averageRating||0);
+        }
+      });
+    })
 };

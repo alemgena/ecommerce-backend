@@ -6,6 +6,29 @@ const jwt = require("jsonwebtoken");
 const moment = require("moment");
 const config = require("../config/config");
 const generator = require("generate-password");
+const Nexmo = require('nexmo');
+const admin = require('firebase-admin');
+const serviceAccount = require('../config/serviceAccountKey.json');
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://shop-management-1a195-default-rtdb.firebaseio.com/",
+  messagingSenderId:750521825593
+});
+const apiKey = '3bb7fa9a';
+const apiSecret = 'We7obmbuSkKhpWnl';
+const nexmo = new Nexmo({ apiKey, apiSecret });
+
+// Function to generate a random OTP
+function generateOTP() {
+  // Generate a 6-digit OTP
+  return Math.floor(100000 + Math.random() * 900000);
+}
+// Function to generate a random OTP
+
+const isEmail = (input) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(input);
+};
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   secure: true,
@@ -151,6 +174,10 @@ exports.forgetPassword = async (email) => {
     );
   }
 };
+
+           
+ 
+
 exports.verifyRefreshToken = async(refreshToken) => {
   return new Promise((resolve, reject) => {
           jwt.verify(refreshToken, config.jwt.secret, async(err, tokenDetails) => {
