@@ -16,6 +16,7 @@ webhook.start(io)
 
 let server;
 mongoose
+  .set('strictQuery', false)
   .connect(config.mongoose.url, config.mongoose.options)
   .then(async () => {
     logger.info("Connected to MongoDB");

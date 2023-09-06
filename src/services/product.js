@@ -180,7 +180,7 @@ exports.getByName = async (name) => {
       }
       resolve(
         data.filter((item) =>
-          item.name.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase().startsWith(name.toLowerCase().slice(0, 2))
+          item.name.replace(/[^a-zA-Z0-9 ]\s+/g, '').toLowerCase().includes(name.replace(/\s+/g, '').toLowerCase())
         )
       );
     });

@@ -124,7 +124,7 @@ exports.getByName = async (name) => {
             new ApiError(httpStatus.NOT_FOUND, "Sub category not found")
           );
         }
-        resolve( data.filter(item => item.name.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase().startsWith(name.toLowerCase().slice(0, 2))));
+        resolve( data.filter(item => item.name.replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase().includes(name.trim().toLowerCase())));
       });
   });
 };

@@ -6,6 +6,7 @@ const uploadImage = require("../helper/uploadImages");
 const ObjectID = require("mongodb").ObjectId;
 const SuccessResponse = require("../utils/successResponse");
 const ApiError = require("../utils/ApiError");
+const { subCategory } = require("../services");
 exports.add = catchAsync(async (req, res) => {
   const body = {
     seller: req.user.id,
@@ -83,7 +84,7 @@ exports.updateProductImages = catchAsync(async (req, res) => {
   if (req.files.length === 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Pleas Select One File");
   }
-  const data = await product.updateProductImages(req.params.id,req.files,);
+  const data = await product.updateProductImages(req.params.id, req.files);
   res
     .status(httpStatus.OK)
     .send(
@@ -111,13 +112,14 @@ exports.delete = catchAsync(async (req, res) => {
     );
 });
 exports.getByName = catchAsync(async (req, res) => {
-  const result = await product.getByName(req.params.name);
-  res.send(
-    new SuccessResponse(
-      httpStatus.OK,
-      " ",
-      result
-
-    )
-  );
+  let result;
+  result = await subCategory.getByName(req.params.name);
+  let subcategory = result?.map((item) => item.product);
+  if (!subcategory.length) {
+    result = await product.getByName(req.params.name);
+  } else {
+    result = subcategory;
+    result = result[0];
+  }
+  res.send(new SuccessResponse(httpStatus.OK, " ", result));
 });

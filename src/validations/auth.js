@@ -66,10 +66,10 @@ const refreshToken={
 }
 const forgetPassword={
   body: Joi.object().keys({
-    input: Joi.string().required().messages({
-      "string.base": "input must be a string",
-      "string.empty": "input is required",
-      "any.required": "input is a required field",
+    email: Joi.string().required().messages({
+      "string.base": "email must be a string",
+      "string.empty": "email is required",
+      "any.required": "email is a required field",
     }),
   }),
 }
