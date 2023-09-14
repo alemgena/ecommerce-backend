@@ -160,27 +160,25 @@ exports.delete = async (id) => {
     });
   });
 };
-exports.getByName = async (name) => {
+exports.getByName = async (name, region) => {
   return new Promise((resolve, reject) => {
-    Product.find()
-    .exec(async (err, data) => {
+    Product.find().exec(async (err, data) => {
       if (err) {
         return reject(
-          new ApiError(
-            httpStatus.NOT_FOUND,
-            "Error finding the product",
-            err
-          )
+          new ApiError(httpStatus.NOT_FOUND, "Error finding the product", err)
         );
       }
       if (!data) {
-        return reject(
-          new ApiError(httpStatus.NOT_FOUND, "Product not found")
-        );
+        return reject(new ApiError(httpStatus.NOT_FOUND, "Product not found"));
       }
       resolve(
-        data.filter((item) =>
-          item.name.replace(/[^a-zA-Z0-9 ]\s+/g, '').toLowerCase().includes(name.replace(/\s+/g, '').toLowerCase())
+        data.filter(
+          (item) =>
+            item.name
+              .replace(/[^a-zA-Z0-9 ]\s+/g, "")
+              .toLowerCase()
+              .includes(name.replace(/\s+/g, "").toLowerCase()) &&
+            item.region === region
         )
       );
     });
