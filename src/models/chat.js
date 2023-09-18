@@ -1,43 +1,22 @@
 const mongoose = require("mongoose");
+const mongoose_delete = require("mongoose-delete");
 const { toJSON, paginate } = require("./plugins");
-let ts = Date.now();
-let date_ob = new Date(ts);
-let date = date_ob.getDate();
-let month = date_ob.getMonth() + 1;
-let year = date_ob.getFullYear();
-let fullDate = year + "-" + month + "-" + date;
-const chatSchema = new mongoose.Schema({
-  message_data: {
-    type: String,
+const chatSchema = new mongoose.Schema(
+  {
+    chatName: { type: String, trim: true },
+    isGroupChat: { type: Boolean, default: false },
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    latestMessage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Message",
+    },
   },
-  url: {
-    type: String,
-  },
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
-    required: true,
-  },
-  from: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-    autopopulate:true
-  },
-  to: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-    autopopulate:true
-  },
-  roomId: {
-    type: Number,
-  },
-
-},{
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
 chatSchema.plugin(toJSON);
 chatSchema.plugin(paginate);
 chatSchema.plugin(require(`mongoose-autopopulate`));
+chatSchema.plugin(mongoose_delete, { overrideMethods: true });
 module.exports = Chat = mongoose.model("Chat", chatSchema);

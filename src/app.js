@@ -47,6 +47,7 @@ passport.use("jwt", jwtStrategy);
 app.use(express.static("src/uploads"));
 // api api routes
 app.use("/api/auth", routers.auth);
+app.use("/api/messages", routers.message);
 app.use("/api/products", routers.product);
 app.use("/api/categories", routers.category);
 app.use("/api/subcategories", routers.subCategory);

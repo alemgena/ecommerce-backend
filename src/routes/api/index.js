@@ -20,6 +20,7 @@ const chat = require("./chat");
 const review = require("./review");
 const region=require('./region')
 const document=require('./document')
+const message=require('./message')
 const Routers = {
   auth,
   product,
@@ -29,6 +30,7 @@ const Routers = {
   user,
   document,
   feedBack,
+  message,
   subCategory,
   socials,
   upload,

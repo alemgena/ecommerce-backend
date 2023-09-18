@@ -177,7 +177,7 @@ exports.getByName = async (name, region) => {
             item.name
               .replace(/[^a-zA-Z0-9 ]\s+/g, "")
               .toLowerCase()
-              .includes(name.replace(/\s+/g, "").toLowerCase()) &&
+              .includes(name.replace(/\s+/g, "").toLowerCase()) ||
             item.region === region
         )
       );

@@ -1,38 +1,24 @@
 const Joi = require("joi");
 const ObjectID = require("mongodb").ObjectId;
 const add = {
-  body: Joi.object().keys({
-    message_data: Joi.string().required().messages({
-      "string.empty": "message cannot be empty field",
+    body: Joi.object().keys({
+      userId: Joi.string()
+        .min(4)
+        .required()
+        .custom((value, helper) => {
+          if (!ObjectID.isValid(value)) {
+            return helper.message("user  id is not valid");
+          } else {
+            return value;
+          }
+        })
+        .messages({
+          "string.base": "userId must be a string",
+          "string.empty": "userId cannot be empty field",
+          "any.required": "userId is a required field",
+        }),
     }),
-    url: Joi.string().min(4).messages({
-      "string.base": "url must be a string",
-      "string.empty": "url cannot be empty field",
-    }),
-    to: Joi.string().required().custom((value, helper) => {
-      if (!ObjectID.isValid(value)) {
-        return helper.message("user id is not valid");
-      } else {
-        return value;
-      }
-    }).messages({
-      "string.empty": "to cannot be empty field",
-    }),
-    product: Joi.string().required().custom((value, helper) => {
-      if (!ObjectID.isValid(value)) {
-        return helper.message("product id is not valid");
-      } else {
-        return value;
-      }
-    }).messages({
-      "string.empty": "product cannot be empty field",
-    }),
-
-    roomId: Joi.number().messages({
-      "string.base": "roomId must be a number",
-      "string.empty": "roomId cannot be an empty field",
-    }),
-  }),
+  
 };
 const get = {
   params: Joi.object().keys({
