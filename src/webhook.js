@@ -1,25 +1,34 @@
 let clients = {}
 let socketIo
-const{chat}=require('../src/services')
 let io = null
 module.exports = {
   start: function (io) {
     io = io;
+    global.onlineUsers = new Map();
     io.on("connection", function (socket) {
       socket.emit("connection", "Ws connected");
-  socket.on("join_room", (data) => {
-    socket.join(data);
-  });
-  socket.on("send_message", async(data) => {
-    socket.broadcast.emit("receive_message", data);
-  });
-  //chatImage
-  socket.on("chatImage",async(data) => {
-    socket.to(data.room).emit("chatImage", data);
-  });
-
-  socket.on("disconnect", () => {
-  });
+      socket.on("setup", (userData) => {
+        socket.join(userData._id);
+        socket.emit("connected");
+      });
+      socket.on("join chat", (room) => {
+        socket.join(room);
+        console.log("User Joined Room: " + room);
+      });
+      socket.on("typing", (room) => socket.in(room).emit("typing"));
+      socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+      socket.on("new message", (newMessageRecieved) => {
+        var chat = newMessageRecieved.chat;
+        if (!chat.users) return console.log("chat.users not defined");
+        chat.users.forEach((user) => {
+          if (user._id == newMessageRecieved.sender._id) return;
+          socket.in(user._id).emit("message recieved", newMessageRecieved);
+        });
+      });
+      socket.off("setup", () => {
+        console.log("USER DISCONNECTED");
+        socket.leave(userData._id);
+      });
     });
   },
 };
