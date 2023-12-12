@@ -6,7 +6,9 @@ const storage = multer.diskStorage({
     let params;
     if(req.params.type){
       params=req.params.type
+      console.log(params)
     }
+  
     else{
       params='user'
     }

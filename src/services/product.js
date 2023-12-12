@@ -171,6 +171,7 @@ exports.getByName = async (name, region) => {
       if (!data) {
         return reject(new ApiError(httpStatus.NOT_FOUND, "Product not found"));
       }
+      
       resolve(
         data.filter(
           (item) =>

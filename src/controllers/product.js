@@ -119,7 +119,11 @@ exports.getByName = catchAsync(async (req, res) => {
     result = await product.getByName(req.params.name, req.query.region);
   } else {
     result = subcategory;
+    if(req.query.region)
     result = result[0].filter((item) => item.region === req.query.region);
+  else{
+    result = result[0]
+  }
   }
   res.send(new SuccessResponse(httpStatus.OK, " ", result));
 });
